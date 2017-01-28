@@ -74,16 +74,22 @@
 								<th>No</th>
 								<th>NIM</th>
 								<th>Nama</th>
-								<th>Wali</th>
-								<th>Angkatan</th>
-								<th>Topik</th>
+								<!-- <th>Kumulatif</th> -->
+								<th>SKS</th>
+								<!-- <th>KRS</th> -->
+								<th>Daftar</th>
+								<th>K. FISIK</th>
+								<th>K. ANALITIK</th>
+								<th>K. ORGANIK</th>
+								<th>K. ANORGANIK</th>
+								<th>BIOKIMIA</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody id="hasil_anggota">
 						<?php
 							// Assign a query
-							$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim INNER JOIN perwalian on anggota.id_wali=perwalian.id_wali ORDER BY nama LIMIT 10";
+							$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim ORDER BY nama LIMIT 10";
 							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
@@ -95,13 +101,18 @@
 								echo "<td>".$i."</td>";$i++;
 								echo "<td>".$row->nim."</td>";
 								echo "<td>".$row->nama."</td>";
-								echo "<td>".$row->nama_wali."</td>";
-								echo "<td>".$row->angkatan."</td>";
-								echo "<td>".$row->topik."</td>";
+								//echo "<td>".$row->komulatif."</td>";
+								echo "<td>".$row->sks."</td>";
+								//echo "<td>".$row->krs."</td>";
+								echo "<td>".$row->daftar."</td>";
+								echo "<td>".$row->fisik."</td>";
+								echo "<td>".$row->analitik."</td>";
+								echo "<td>".$row->organik."</td>";
+								echo "<td>".$row->anorganik."</td>";
+								echo "<td>".$row->biokimia."</td>";
 								echo "<td>
-										<a href='edit_anggota.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
+										<a href='edit_daftar_tr1.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
 										<a href='delete_anggota.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;
-										<a href='repass.php?data=anggota&nim=".$row->nim."'><i class='fa fa-lock'></i></a>
 									 </td>";
 								echo "</tr>";
 							}			

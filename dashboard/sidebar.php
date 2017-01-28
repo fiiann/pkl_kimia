@@ -30,7 +30,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php"><i class="fa fa-thumbs-o-up"></i> <?php echo $site_name ?></a> 
+                <a class="navbar-brand" hKeloref="index.php"><i class="fa fa-thumbs-o-up"></i> <?php echo $site_name ?></a> 
             </div>
 			<div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
 				<a href="profil.php" title='Ubah Password' style="color:#fff; font-size:12px;"><i class="fa fa-lock"></i> <?php if($status=="petugas") echo $petugas->nama; else echo $anggota->nama; ?> </a>&nbsp;&nbsp;
@@ -75,7 +75,7 @@
 						</ul>
 					</li>
 					<li>
-						<a href="#"><i class="fa fa-edit fa-2x"></i> Kelola Mahasiswa<span class="fa arrow"></span></a>
+						<a href="#"><i class="fa fa-edit fa-2x"></i> Kelola Petugas<span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level">
 							<li><a href="daftar_petugas.php">Data Petugas</a></li>
 							<li><a href="tambah_petugas.php">Tambah Petugas</a></li>

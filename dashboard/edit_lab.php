@@ -9,6 +9,12 @@
 		header('Location:./index.php');
 	}
 	
+	$db=new mysqli($db_host, $db_username, $db_password, $db_database);
+
+	if($db->connect_errno){
+		die("Could not connect to the database : <br/>". $db->connect_error);
+	}
+
 	$errorLab='';
 	
 	
@@ -28,14 +34,14 @@
 		}else{
 			while ($row = $result->fetch_object()){
 				// $nim=$row->nim;
-				$id_lab = $row->id_lab;
+				$lab = $row->id_lab;
 			}
 		}
 	}else{
 		// Cek Nama
 		$nim=test_input($_POST['nim']);
-		$id_lab=test_input($_POST['id_lab']);
-		if ($id_lab=='') {
+		$lab=test_input($_POST['lab']);
+		if ($lab=='') {
 			$errorLab='wajib diisi';
 			$validLab=FALSE;
 		}else{
@@ -47,9 +53,9 @@
 		// jika tidak ada kesalahan input
 		if ($validLab) {
 			
-			$id_lab=$con->real_escape_string($id_lab);
+			$lab=$con->real_escape_string($lab);
 
-			$query = "UPDATE penempatan SET  id_lab='".$id_lab."' WHERE nim='".$nim."'";
+			$query = "UPDATE penempatan SET  id_lab='".$lab."' WHERE nim='".$nim."'";
 
 			$hasil=$con->query($query);
 			if (!$hasil) {
@@ -75,13 +81,35 @@
 				<div class="row">
 					<div class="col-md-12">
 						<form method="POST" role="form" autocomplete="on" action="">
-							<div class="form-group" hidden>
+							<div class="form-group">
 								<label>NIM</label>
-								<input class="form-control" type="text" name="nim" maxlength="14" size="30" value="<?php echo $nim; ?>">
+								<input class="form-control" type="text" name="nim" maxlength="14" readonly size="30" value="<?php echo $nim; ?>">
 							</div>
 							<div class="form-group">
-								<label>Laboratorium</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorLab)) echo $errorLab;?></span>
+								<!-- <label>Laboratorium</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorLab)) echo $errorLab;?></span>
 								<input class="form-control" type="text" name="id_lab" maxlength="50" size="30"  required value="<?php if(isset($id_lab)){echo $id_lab;} ?>">
+							</div> -->
+							<div class="form-group">
+											<label>LABORATORIUM</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_Lab)) echo $error_Lab;?></span>&nbsp;
+											<select id="lab" name="lab" required>
+							<option value="none">--Pilih lab --</option>
+							<?php
+								$querykat = "select * from lab";
+								$resultkat = $db->query($querykat);
+								if(!$resultkat){
+									die("Could not connect to the database : <br/>". $db->connect_error);
+								}
+								while ($row = $resultkat->fetch_object()){ 
+									$sid = $row->id_lab; 
+									$sname = $row->nama_lab; 
+									echo '<option value='.$sid.' '; 
+									if(isset($lab) && $lab==$sid)
+									echo 'selected="true"';
+									echo '>'.$sname.'<br/></option>';
+									//echo "cek";
+								} 
+							?></select>
+							<span class="error">* <?php if(!empty($error_Lab)) echo $error_Lab; ?></span>
 							</div>
 							
 							<div class="form-group">
@@ -92,8 +120,8 @@
 				</div>
 			</div>
 		</div>
-		<a href="daftar_penempatan.php"><button class="btn btn-info">Kembali ke Daftar Penempatan</button></a>
 	</div>
+	&nbsp;&nbsp;&nbsp;<a href="daftar_penempatan.php"><button class="btn btn-info">Kembali ke Daftar Penempatan</button></a>
 </div>
 
 <?php

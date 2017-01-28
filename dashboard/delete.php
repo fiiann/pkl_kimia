@@ -40,6 +40,18 @@ if(isset($_GET['data'])){
 			echo 'Data anggota berhasil dihapus. <br />';
 		}
 		echo '<br/><a href="nilai_pkt.php">Daftar Nilai PKT</a>';
+	}elseif($_GET['data']=='pkt'){
+		$nim = $_GET['nim'];
+		$query = "SELECT * FROM daftar_pkt WHERE nim='".$nim."'";
+		$result = $con->query( $query );
+		if(mysqli_num_rows($result)==0){
+			echo 'Penghapusan data gagal. Data tidak ditemukan.<br/>';
+		}else{
+			$query = "DELETE FROM daftar_pkt WHERE nim='".$nim."'";
+			$result = $con->query( $query );
+			echo 'Data anggota berhasil dihapus. <br />';
+		}
+		echo '<br/><a href="daftar_pkt.php">Daftar  PKT</a>';
 	}elseif($_GET['data']=='penempatan'){
 		$nim = $_GET['nim'];
 		$query = "SELECT * FROM penempatan WHERE nim='".$nim."'";

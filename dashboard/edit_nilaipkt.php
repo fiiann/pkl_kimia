@@ -90,11 +90,8 @@
 							</div>
 						</form>
 					</div>
-
 				</div>
-
 			</div>
-
 		</div>
 		<a href="nilai_pkt.php"><button class="btn btn-info">Kembali ke Nilai PKT</button></a>
 	</div>

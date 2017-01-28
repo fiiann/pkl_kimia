@@ -13,7 +13,7 @@
 	if($db->connect_errno){
 		die("Could not connect to the database : <br/>". $db->connect_error);
 	}
-	$errorNim='';
+	//$errorNim='';
 	$error_pilihan1='';
 	$error_pilihan2='';
 	$error_pilihan3='';
@@ -21,8 +21,7 @@
 
 	$sukses=TRUE;
 	// eksekusi tombol edit
-	if (isset($_POST['edit'])) {
-		if(!isset($_POST['edit'])){
+	if (!isset($_POST['edit'])) {
 		if($_GET['nim']==""){
 			header('Location:./daftar_pkt.php');
 		}
@@ -34,17 +33,17 @@
 			die ("Could not query the database: <br />". $con->error);
 		}else{
 			while ($row = $result->fetch_object()){
-				// $nim=$row->nim;
+				 $nim=$row->nim;
 				$pilihan1 = $row->pilihan1;
 				$pilihan2 = $row->pilihan2;
 				$pilihan3 = $row->pilihan3;
 			}
 		}
-		}else{
+	}else{
 		// Cek Nama
 		
 		$nim=test_input($_POST['nim']);
-		$pilihan1=$_POST['pilihan1'];
+		//$pilihan1=$_POST['pilihan1'];
 		$pilihan1 = test_input($_POST['pilihan1']);
 		if($pilihan1 == '' || $pilihan1 == "none"){
 			$error_pilihan1= "Laboratorium harus diisi";
@@ -53,7 +52,7 @@
 			$valid_pilihan1= TRUE;
 		}
 
-		$pilihan2=$_POST['pilihan2'];
+		//$pilihan2=$_POST['pilihan2'];
 		$pilihan2 = test_input($_POST['pilihan2']);
 		if($pilihan2 == '' || $pilihan2 == "none"){
 			$error_pilihan2= "Laboratorium harus diisi";
@@ -75,14 +74,14 @@
 	
 		
 		// jika tidak ada kesalahan input
-		if ($validNim && $valid_pilihan1 && $valid_pilihan2 && $valid_pilihan3) {
+		if ( $valid_pilihan1 && $valid_pilihan2 && $valid_pilihan3) {
 			
-			$nim=$con->real_escape_string($nim);
+			//$nim=$con->real_escape_string($nim);
 			$pilihan1=$con->real_escape_string($pilihan1);
 			$pilihan2=$con->real_escape_string($pilihan2);
 			$pilihan3=$con->real_escape_string($pilihan3);
 
-			echo '$pilihan1';
+			
 			$query = "UPDATE daftar_pkt SET pilihan1='".$pilihan1."', pilihan2='".$pilihan2."', pilihan3='".$pilihan3."' WHERE nim='".$nim."'";
 
 			$hasil=$con->query($query);
@@ -96,7 +95,7 @@
 		else{
 			$sukses=FALSE;
 		}
-	}}
+	}
 //batas
 
 
@@ -117,6 +116,10 @@
 							<span class="label label-success"><?php if(isset($pesan_sukses)) echo $pesan_sukses;?></span>
 
 							<!-- NIM -->
+							<div class="form-group" hidden>
+								<label>NIM</label>
+								<input class="form-control" type="text" name="nim" maxlength="14" size="30" value="<?php echo $nim; ?>">
+							</div>
 							<!-- pilihan1 -->
 							<div  class="form-group">
 								<label>Pilihan 1</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_pilihan1)) echo $error_pilihan1;?></span>&nbsp;
@@ -198,6 +201,7 @@
 				</div>
 			</div>
 		</div>
+		&nbsp;&nbsp;&nbsp;<a href="daftar_pkt.php"><button class="btn btn-info">Kembali ke Daftar Mahasiswa PKT</button></a>
 	</div>
 </div>
 

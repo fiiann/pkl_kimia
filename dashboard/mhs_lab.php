@@ -1,9 +1,16 @@
 <?php
 	require_once('sidebar.php');
+	//$id=$_SESSION['sip_masuk_aja'];
 	if($status=="anggota"){
 		header('Location:./index.php');
 	}
 	
+	$db=new mysqli($db_host, $db_username, $db_password, $db_database);
+
+	if($db->connect_errno){
+		die("Could not connect to the database : <br/>". $db->connect_error);
+	}
+
 	$sukses=TRUE;
 	//penempatan
 	// eksekusi tombol daftar
@@ -81,9 +88,31 @@
 								<label>NIM</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorNim)) echo $errorNim;?></span>
 								<input class="form-control" type="text" name="nim" maxlength="14" size="30" placeholder="nim 14 digit angka" required autofocus value="<?php if(!$sukses&&$validNim){echo $nim;} ?>">
 							</div>
-							<div class="form-group">
+	<!-- 						<div class="form-group">
 								<label>Lab</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorLab)) echo $errorLab;?></span>
 								<input class="form-control" type="text" name="lab" maxlength="14" size="30" placeholder="ex : A" required autofocus value="<?php if(!$sukses&&$validLab){echo $lab;} ?>">
+							</div> -->
+							<div class="form-group">
+											<label>lABORATORIUM</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_Lab)) echo $error_Lab;?></span>&nbsp;
+											<select id="lab" name="lab" required>
+							<option value="none">--Pilih lab --</option>
+							<?php
+								$querykat = "select * from lab";
+								$resultkat = $db->query($querykat);
+								if(!$resultkat){
+									die("Could not connect to the database : <br/>". $db->connect_error);
+								}
+								while ($row = $resultkat->fetch_object()){ 
+									$sid = $row->id_lab; 
+									$sname = $row->nama_lab; 
+									echo '<option value='.$sid.' '; 
+									if(isset($lab) && $lab==$sid)
+									echo 'selected="true"';
+									echo '>'.$sname.'<br/></option>';
+									//echo "cek";
+								} 
+							?></select>
+							<span class="error">* <?php if(!empty($error_Lab)) echo $error_Lab; ?></span>
 							</div>
 							<div class="form-group">
 								<input class="form-control" type="submit" name="daftar" value="Input">

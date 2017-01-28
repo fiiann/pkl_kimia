@@ -4,26 +4,102 @@
 ?>
 <script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script>
+	function getQueryVariable(variable)
+	{
+		   var query = window.location.search.substring(1);
+		   var vars = query.split("&");
+		   for (var i=0;i<vars.length;i++) {
+				   var pair = vars[i].split("=");
+				   if(pair[0] == variable){return pair[1];}
+		   }
+		   return(false);
+	}
 	$(document).ready(function(){
+		if(getQueryVariable("search")!=""){
+			var search= getQueryVariable("search");
+			$.ajax({
+				url:"ajax_func/search_bimbingan.php?search="+search,
+				type:"GET",
+				dataType:"html",
+				
+				beforeSend: function(){
+					$("#hasil_cari").html('<img src="assets/img/loader.gif" height="20px"/>');
+					
+				},
+				success: function(data){
+					$("#hasil_cari").html(data);
+				},
+				error: function(){
+					$("#hasil_cari").html("The page can't be loaded1");
+				}
+			});
+		}
+		$('#search').keyup(function(){
+			if($("#search").val()==undefined){
+				var search="";
+			}else{
+				var search= $("#search").val();
+			}
+			$.ajax({
+				url:"ajax_func/search_bimbingan.php?search="+search,
+				type:"GET",
+				dataType:"html",
+				
+				beforeSend: function(){
+					$("#hasil_cari").html('<img src="assets/img/loader.gif" height="20px"/>');
+				},
+				success: function(data){
+					$("#hasil_cari").html(data);
+				},
+				error: function(){
+					$("#hasil_cari").html("The page can't be loaded2");
+				}
+			});
+			$.ajax({
+				url:"ajax_func/search_bimbingan.php?bimbingan=bimbingan&search="+search,
+				type:"GET",
+				dataType:"html",
+				
+				beforeSend: function(){
+					$("#page").html('<img src="assets/img/loader.gif" height="20px"/>');
+				},
+				success: function(data){
+					$("#page").html(data);
+				},
+				error: function(){
+					$("#page").html("The page can't be loaded3");
+				}
+			});
+			if(search==''){
+				window.history.pushState("object or string", "Daftar Bimbingan : "+search, "daftar_bimbingan.php");				
+			}else{
+				window.history.pushState("object or string", "Daftar Bimbingan : "+search, "daftar_bimbingan.php?search="+search);	
+			}
+		});
 		$('#page').change(function(){
 			if($("#page").val()==undefined){
 				var page="";
 			}else{
 				var page= $("#page").val();
 			}
+			if($("#search").val()==undefined){
+				var search="";
+			}else{
+				var search= $("#search").val();
+			}
 			$.ajax({
-				url:"ajax_func/list_anggota.php?page="+page,
+				url:"ajax_func/search_bimbingan.php?search="+search+"&page="+page,
 				type:"GET",
 				dataType:"html",
 				
 				beforeSend: function(){
-					$("#hasil_anggota").html('<img src="assets/img/loader.gif" height="20px"/>');
+					$("#hasil_cari").html('<img src="assets/img/loader.gif" height="20px"/>');
 				},
 				success: function(data){
-					$("#hasil_anggota").html(data);
+					$("#hasil_cari").html(data);
 				},
 				error: function(){
-					$("#hasil_anggota").html("The page can't be loaded");
+					$("#hasil_cari").html("The page can't be loaded4");
 				}
 			});
 		});
@@ -33,6 +109,9 @@
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
+				<div class="col-md-9 col-sm-12 col-xs-12">
+					Search : <input class="form-control" type="text" name="search" placeholder="Masukkan mahasiwa, pembimbing," id="search" autofocus value="<?php if(isset($_GET['search'])) echo $_GET['search']; ?>"/>
+				</div>
 				<div class="col-md-2 col-sm-12 col-xs-12">
 					Page :
 				<select class='form-control' id='page'>
@@ -66,12 +145,13 @@
 						<thead>
 							<tr>
 								<th>No</th>
+								<th>NIM</th>
 								<th>Mahasiswa</th>
 								<th>Pembimbing</th>					
 								<th>Action</th>
 							</tr>
 						</thead>
-						<tbody id="hasil_anggota">
+						<tbody id="hasil_cari">
 						<?php
 							// Assign a query
 							$query = "SELECT * FROM bimbingan INNER JOIN anggota ON bimbingan.nim=anggota.nim INNER JOIN dosen on bimbingan.nip=dosen.nip ORDER BY nama LIMIT 10";
@@ -84,6 +164,7 @@
 							while($row = $result->fetch_object()){
 								echo "<tr>";
 								echo "<td>".$i."</td>";$i++;
+								echo "<td>".$row->nim."</td>";$i++;
 								echo "<td>".$row->nama."</td>";
 								echo "<td>".$row->nama_dosen."</td>";	
 								echo "<td>

@@ -75,7 +75,7 @@
 								<!-- <th>Email</th> -->
 								<th>No Telp.</th>
 								<th>Wali</th>
-								<th>Angkatan.</th>
+								<th>Angkatan</th>
 								<th>Action</th>
 							</tr>
 						</thead>

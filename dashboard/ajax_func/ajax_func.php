@@ -152,12 +152,13 @@ if(isset($_GET['viewstok'])){
 }
 if(isset($_GET['search'])){
 	$search=$_GET['search'];
-	if(isset($_GET['buku'])){
-		$query = "SELECT count(isbn) as jml_data FROM buku b LEFT JOIN kategori k ON b.idkategori=k.idkategori
-			  WHERE judul like '%$search%' OR pengarang like '%$search%' OR penerbit like '%$search%' OR nama like '%$search%'";
-	}elseif(isset($_GET['buku_dipinjam'])){
-		if($search==''){
-			$query="SELECT count(detail_transaksi.idbuku) FROM buku JOIN detail_transaksi ON buku.idbuku=detail_transaksi.idbuku JOIN peminjaman ON detail_transaksi.idtransaksi=peminjaman.idtransaksi WHERE detail_transaksi.tgl_kembali = date(0000-00-00) GROUP BY detail_transaksi.idbuku LIMIT 10 OFFSET $start";
+	if(isset($_GET['pkt'])){
+		$query = "SELECT count(daftar_pkt.nim) as jml_data FROM daftar_pkt d LEFT JOIN anggota a ON d.nim=a.nim
+			  WHERE d.nim like '%$search%' OR nama like '%$search%'";
+	}elseif(isset($_GET['bimbingan'])){
+			$query="SELECT count(bimbingan.nim) FROM bimbingan JOIN dosen ON bimbingan.nip=dosen.nip JOIN anggota ON bimbingan.nim=anggota.nim WHERE bimbingan.nim like '%$search%' OR nama_dosen like '%$search%' LIMIT 10 OFFSET $start";
+		}elseif(isset($_GET['penempatan'])){
+			$query = "SELECT * FROM penempatan p INNER JOIN anggota a ON p.nim=a.nim WHERE p.nim like '%$search%' OR nama like '%$search%' LIMIT 10 OFFSET $start";
 		}else{	
 			$query="SELECT count(detail_transaksi.idbuku) FROM buku JOIN detail_transaksi ON buku.idbuku=detail_transaksi.idbuku JOIN peminjaman ON detail_transaksi.idtransaksi=peminjaman.idtransaksi WHERE detail_transaksi.tgl_kembali = date(0000-00-00) AND peminjaman.nim= ".$search." GROUP BY detail_transaksi.idbuku LIMIT 10 OFFSET $start";
 		}

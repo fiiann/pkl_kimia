@@ -4,26 +4,102 @@
 ?>
 <script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script>
+	function getQueryVariable(variable)
+	{
+		   var query = window.location.search.substring(1);
+		   var vars = query.split("&");
+		   for (var i=0;i<vars.length;i++) {
+				   var pair = vars[i].split("=");
+				   if(pair[0] == variable){return pair[1];}
+		   }
+		   return(false);
+	}
 	$(document).ready(function(){
+		if(getQueryVariable("search")!=""){
+			var search= getQueryVariable("search");
+			$.ajax({
+				url:"ajax_func/search_penempatan.php?search="+search,
+				type:"GET",
+				dataType:"html",
+				
+				beforeSend: function(){
+					$("#hasil_cari").html('<img src="assets/img/loader.gif" height="20px"/>');
+					
+				},
+				success: function(data){
+					$("#hasil_cari").html(data);
+				},
+				error: function(){
+					$("#hasil_cari").html("The page can't be loaded");
+				}
+			});
+		}
+		$('#search').keyup(function(){
+			if($("#search").val()==undefined){
+				var search="";
+			}else{
+				var search= $("#search").val();
+			}
+			$.ajax({
+				url:"ajax_func/search_penempatan.php?search="+search,
+				type:"GET",
+				dataType:"html",
+				
+				beforeSend: function(){
+					$("#hasil_cari").html('<img src="assets/img/loader.gif" height="20px"/>');
+				},
+				success: function(data){
+					$("#hasil_cari").html(data);
+				},
+				error: function(){
+					$("#hasil_cari").html("The page can't be loaded");
+				}
+			});
+			$.ajax({
+				url:"ajax_func/ajax_func.php?=penempatan&penempatan="+search,
+				type:"GET",
+				dataType:"html",
+				
+				beforeSend: function(){
+					$("#page").html('<img src="assets/img/loader.gif" height="20px"/>');
+				},
+				success: function(data){
+					$("#page").html(data);
+				},
+				error: function(){
+					$("#page").html("The page can't be loaded");
+				}
+			});
+			if(search==''){
+				window.history.pushState("object or string", "Daftar Penempatan : "+search, "daftar_penempatan.php");				
+			}else{
+				window.history.pushState("object or string", "Daftar Penempatan : "+search, "daftar_penempatan.php?search="+search);	
+			}
+		});
 		$('#page').change(function(){
 			if($("#page").val()==undefined){
 				var page="";
 			}else{
 				var page= $("#page").val();
 			}
+			if($("#search").val()==undefined){
+				var search="";
+			}else{
+				var search= $("#search").val();
+			}
 			$.ajax({
-				url:"ajax_func/list_anggota.php?page="+page,
+				url:"ajax_func/search_penempatan.php?search="+search+"&page="+page,
 				type:"GET",
 				dataType:"html",
 				
 				beforeSend: function(){
-					$("#hasil_anggota").html('<img src="assets/img/loader.gif" height="20px"/>');
+					$("#hasil_cari").html('<img src="assets/img/loader.gif" height="20px"/>');
 				},
 				success: function(data){
-					$("#hasil_anggota").html(data);
+					$("#hasil_cari").html(data);
 				},
 				error: function(){
-					$("#hasil_anggota").html("The page can't be loaded");
+					$("#hasil_cari").html("The page can't be loaded");
 				}
 			});
 		});
@@ -33,6 +109,9 @@
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
+				<div class="col-md-9 col-sm-12 col-xs-12">
+					Search : <input class="form-control" type="text" name="search" placeholder="Masukkan nama, nim," id="search" autofocus value="<?php if(isset($_GET['search'])) echo $_GET['search']; ?>"/>
+				</div>
 				<div class="col-md-2 col-sm-12 col-xs-12">
 					Page :
 				<select class='form-control' id='page'>
@@ -72,7 +151,7 @@
 								<th>Action</th>
 							</tr>
 						</thead>
-						<tbody id="hasil_anggota">
+						<tbody id="hasil_cari">
 						<?php
 							// Assign a query
 							$query = "SELECT * FROM penempatan INNER JOIN anggota ON penempatan.nim=anggota.nim ORDER BY nama LIMIT 10";
