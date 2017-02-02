@@ -67,11 +67,18 @@
 					<table class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
-								<th>No</th>
-								<th>NIM</th>
-								<th>Nama</th>
-								<th>Nilai</th>					
-								<th>Action</th>
+								<th rowspan="2">No</th>
+								<th rowspan="2">NIM</th>
+								<th rowspan="2">Nama</th>
+								<th colspan="5">Nilai</th>
+								<th rowspan="2">Action</th>
+							</tr>
+							<tr>
+								<th>Praktikum (60%)</th>
+								<th>Laporan (30%)</th>
+								<th>Presentasi (10%)</th>
+								<th>Akhir (100%)</th>
+								<th>Huruf</th>
 							</tr>
 						</thead>
 						<tbody id="hasil_anggota">
@@ -84,12 +91,18 @@
 								die('Could not connect to database : <br/>'.$con->error);
 							}
 							$i=1;
+							// $row=$result->fetch_object();
+							// $nilai_akhir=$row->nilai_praktikum;
 							while($row = $result->fetch_object()){
 								echo "<tr>";
 								echo "<td>".$i."</td>";$i++;
 								echo "<td>".$row->nim."</td>";
 								echo "<td>".$row->nama."</td>";
-								echo "<td>".$row->nilai_pkt."</td>";		
+								echo "<td>".$row->nilai_praktikum."</td>";
+								echo "<td>".$row->nilai_laporan."</td>";
+								echo "<td>".$row->nilai_presentasi."</td>";
+								echo "<td>".$nilai_akhir."</td>";
+								echo "<td>".$row->nilai_presentasi."</td>";
 								echo "<td>
 										<a href='edit_nilaipkt.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
 										<a href='delete_nilaipkt.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;

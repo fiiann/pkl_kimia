@@ -27,24 +27,43 @@
 				$validNim = TRUE;
 			}
 		}
-		// Cek Nip
-		$nilai_pkt=test_input($_POST['nilai_pkt']);
-		if ($nilai_pkt=='') {
-			$errornilai_pkt='wajib diisi';
-			$validnilai_pkt=FALSE;
+		// Cek Nilai praktikum
+		$nilai_praktikum=test_input($_POST['nilai_praktikum']);
+		if ($nilai_praktikum=='') {
+			$errornilai_praktikum='wajib diisi';
+			$validnilai_praktikum=FALSE;
 		}else{
-				$validnilai_pkt = TRUE;
-			}
+				$validnilai_praktikum = TRUE;
+			 }
 
+		// Cek Nilai praktikum
+		$nilai_laporan=test_input($_POST['nilai_laporan']);
+		if ($nilai_laporan=='') {
+			$errornilai_laporan='wajib diisi';
+			$validnilai_laporan=FALSE;
+		}else{
+				$validnilai_laporan = TRUE;
+			 }
+
+
+		$nilai_presentasi=test_input($_POST['nilai_presentasi']);
+		if ($nilai_presentasi=='') {
+			$errornilai_presentasi='wajib diisi';
+			$validnilai_presentasi=FALSE;
+		}else{
+				$validnilai_presentasi = TRUE;
+			 }
 		
 
 		// jika tidak ada kesalahan input
-		if ($validNim && $validnilai_pkt ) {
+		if ($validNim && $validnilai_praktikum && $validnilai_laporan && $validnilai_laporan ) {
 			$nim=$con->real_escape_string($nim);
-			$nilai_pkt=$con->real_escape_string($nilai_pkt);
+			$nilai_praktikum=$con->real_escape_string($nilai_praktikum);
+			$nilai_laporan=$con->real_escape_string($nilai_laporan);
+			$nilai_presentasi=$con->real_escape_string($nilai_presentasi);
 			
 
-			$query = "INSERT INTO nilai_pkt (nim, nilai_pkt) VALUES ('".$nim."',$nilai_pkt)";
+			$query = "INSERT INTO nilai_pkt (nim, nilai_praktikum, nilai_laporan, nilai_presentasi) VALUES ('".$nim."',$nilai_praktikum,$nilai_laporan,$nilai_presentasi)";
 
 			$hasil=$con->query($query);
 			if (!$hasil) {
@@ -83,8 +102,16 @@
 								<input class="form-control" type="text" name="nim" maxlength="14" size="30" placeholder="nim 14 digit angka" required autofocus value="<?php if(!$sukses&&$validNim){echo $nim;} ?>">
 							</div>
 							<div class="form-group">
-								<label>Nilai PKT</label>&nbsp;<span class="label label-warning">* <?php if(isset($errornilai_pkt)) echo $errornilai_pkt;?></span>
-								<input class="form-control" type="text" name="nilai_pkt" maxlength="3" size="30" placeholder="0-100" required autofocus value="<?php if(!$sukses&&$validnilai_pkt){echo $nilai_pkt;} ?>">
+								<label>Nilai Praktikum (60%)</label>&nbsp;<span class="label label-warning">* <?php if(isset($errornilai_praktikum)) echo $errornilai_praktikum;?></span>
+								<input class="form-control" type="text" name="nilai_praktikum" maxlength="3" size="30" placeholder="0-100" required autofocus value="<?php if(!$sukses&&$validnilai_praktikum){echo $nilai_praktikum;} ?>">
+							</div>
+							<div class="form-group">
+								<label>Nilai Laporan (30%)</label>&nbsp;<span class="label label-warning">* <?php if(isset($errornilai_laporan)) echo $errornilai_laporan;?></span>
+								<input class="form-control" type="text" name="nilai_laporan" maxlength="3" size="30" placeholder="0-100" required autofocus value="<?php if(!$sukses&&$validnilai_laporan){echo $nilai_laporan;} ?>">
+							</div>
+							<div class="form-group">
+								<label>Nilai Presentasi (10%)</label>&nbsp;<span class="label label-warning">* <?php if(isset($errornilai_presentasi)) echo $errornilai_presentasi;?></span>
+								<input class="form-control" type="text" name="nilai_presentasi" maxlength="3" size="30" placeholder="0-100" required autofocus value="<?php if(!$sukses&&$validnilai_presentasi){echo $nilai_presentasi;} ?>">
 							</div>
 							
 							<div class="form-group">
