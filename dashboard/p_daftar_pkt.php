@@ -110,7 +110,7 @@
 							<!-- NIM -->
 							<div class="form-group">
 								<label>NIM</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorNim)) echo $errorNim;?></span>
-								<input class="form-control" type="text" name="nim" maxlength="14" size="30" placeholder="nim 14 digit angka" required autofocus value="<?php if(!$sukses&&$validNim){echo $nim;} ?>">
+								<input class="form-control" type="text" name="nim" maxlength="14" size="30" <?php if ($status=='anggota') echo 'readonly'; ?> placeholder="nim 14 digit angka" required autofocus value="<? if ($status=="anggota"){ echo $anggota->nim; }  ?>">
 							</div>
 							<div class="form-group">
 								<label>Pilih Laboratorium</label>&nbsp;

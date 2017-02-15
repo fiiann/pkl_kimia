@@ -147,14 +147,26 @@
 								<th>No</th>
 								<th>NIM</th>
 								<th>Mahasiswa</th>
-								<th>Pembimbing</th>					
-								<th>Action</th>
+								<th>Pembimbing</th>
+								<?php 
+									if ($status=="petugas")
+									echo "<th>Action</th>";
+								?>
 							</tr>
 						</thead>
 						<tbody id="hasil_cari">
 						<?php
 							// Assign a query
-							$query = "SELECT * FROM bimbingan INNER JOIN anggota ON bimbingan.nim=anggota.nim INNER JOIN dosen on bimbingan.nip=dosen.nip ORDER BY nama LIMIT 10";
+							if ($status=="petugas") {
+								$query = "SELECT * FROM bimbingan INNER JOIN anggota ON bimbingan.nim=anggota.nim INNER JOIN dosen on bimbingan.nip=dosen.nip ORDER BY nama LIMIT 10";
+							}elseif ($status=="anggota"){
+								$query = "SELECT * FROM bimbingan INNER JOIN anggota ON bimbingan.nim=anggota.nim INNER JOIN dosen on bimbingan.nip=dosen.nip WHERE anggota.nim='".$anggota->nim."'";
+							}elseif ($status=="dosen"){
+								$query = "SELECT * FROM bimbingan INNER JOIN anggota ON bimbingan.nim=anggota.nim INNER JOIN dosen on bimbingan.nip=dosen.nip WHERE anggota.id_wali='".$dosen->id_wali."'";
+							}elseif ($status=="lab"){
+								$query = "SELECT * FROM bimbingan INNER JOIN anggota ON bimbingan.nim=anggota.nim INNER JOIN dosen on bimbingan.nip=dosen.nip WHERE dosen.idlab='".$lab->idlab."'";
+							}
+							
 							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
@@ -162,16 +174,18 @@
 							}
 							$i=1;
 							while($row = $result->fetch_object()){
-								echo "<tr>";
+								echo "<tr align='center'>";
 								echo "<td>".$i."</td>";$i++;
 								echo "<td>".$row->nim."</td>";$i++;
 								echo "<td>".$row->nama."</td>";
-								echo "<td>".$row->nama_dosen."</td>";	
-								echo "<td>
+								echo "<td>".$row->nama_dosen."</td>";
+								if ($status=='petugas') {
+										echo "<td align='center'>
 										<a href='edit_bimbingan.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
 										<a href='delete_bimbingan.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;
-										
-									 </td>";
+									 </td>";		
+									}	
+								
 								echo "</tr>";
 							}			
 						?>

@@ -1,5 +1,8 @@
 <?php		
 	include_once('sidebar.php');
+	if($status=="anggota"){
+		header('Location:./index.php');
+	}
 	$id=$_SESSION['sip_masuk_aja'];
 ?>
 <script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
@@ -18,7 +21,7 @@
 		if(getQueryVariable("search")!=""){
 			var search= getQueryVariable("search");
 			$.ajax({
-				url:"ajax_func/search_daftar_pkt.php?search="+search,
+				url:"ajax_func/search_penempatan.php?search="+search,
 				type:"GET",
 				dataType:"html",
 				
@@ -41,7 +44,7 @@
 				var search= $("#search").val();
 			}
 			$.ajax({
-				url:"ajax_func/search_daftar_pkt.php?search="+search,
+				url:"ajax_func/search_penempatan.php?search="+search,
 				type:"GET",
 				dataType:"html",
 				
@@ -56,7 +59,7 @@
 				}
 			});
 			$.ajax({
-				url:"ajax_func/ajax_func.php?pkt=pkt&search="+search,
+				url:"ajax_func/ajax_func.php?=penempatan&penempatan="+search,
 				type:"GET",
 				dataType:"html",
 				
@@ -71,9 +74,9 @@
 				}
 			});
 			if(search==''){
-				window.history.pushState("object or string", "Daftar PKT : "+search, "daftar_pkt.php");				
+				window.history.pushState("object or string", "Daftar Penempatan : "+search, "daftar_penempatan.php");				
 			}else{
-				window.history.pushState("object or string", "Daftar PLT : "+search, "daftar_pkt.php?search="+search);	
+				window.history.pushState("object or string", "Daftar Penempatan : "+search, "daftar_penempatan.php?search="+search);	
 			}
 		});
 		$('#page').change(function(){
@@ -88,7 +91,7 @@
 				var search= $("#search").val();
 			}
 			$.ajax({
-				url:"ajax_func/search_daftar_pkt.php?search="+search+"&page="+page,
+				url:"ajax_func/search_penempatan.php?search="+search+"&page="+page,
 				type:"GET",
 				dataType:"html",
 				
@@ -109,16 +112,14 @@
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<!--  -->
-				
 				<div class="col-md-9 col-sm-12 col-xs-12">
-					Search : <input class="form-control" type="text" name="search" placeholder="Masukkan nama, nim," id="search" autofocus value="<?php if(isset($_GET['search'])) echo $_GET['search']; ?>"/>
+					Search : <input class="form-control" type="text" name="search" placeholder="Masukkan nama, nim," id="search" value="<?php if(isset($_GET['search'])) echo $_GET['search']; ?>"/>
 				</div>
 				<div class="col-md-2 col-sm-12 col-xs-12">
 					Page :
 				<select class='form-control' id='page'>
 				<?php
-					$query = "SELECT count(nim) as jml_data FROM daftar_pkt";
+					$query = "SELECT count(nim) as jml_data FROM penempatan";
 					// Execute the query
 					$result = $con->query( $query );
 					$row = $result->fetch_object();
@@ -139,39 +140,35 @@
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-			   Daftar Mahasiswa yang mendaftar PKT
+			   Penempatan Laboratorium
 			</div>
 			<div class="panel-body">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover">
-						<thead align="center">
-							<tr align="center">
-								<th rowspan="2">No</th>
-								<th rowspan="2">Nama</th>
-								<th rowspan="2">NIM</th>
-								<!-- <th>Wali</th>
-								<th>Angkatan</th> -->
-								<th colspan="3" align="center">Laboratorium</th>
-								<th rowspan="2">Action</th>
-							</tr>
+						<thead>
 							<tr>
-								<!-- <th>Wali</th>
-								<th>Angkatan</th> -->
-								<th>Pilihan 1</th>
-								<th>Pilihan 2</th>
-								<th>Pilihan 3</th>
+								<th>No</th>
+								<th>NIM</th>
+								<th>Nama</th>
+								<th>Laboratorium</th>
+								<th>Input Nilai</th>
+								<?php 
+									if ($status=="petugas") {
+										echo "<th>Action</th>";
+									}
+							    ?>
 							</tr>
 						</thead>
 						<tbody id="hasil_cari">
 						<?php
-					
-							if (($status=="petugas")||($status=="lab")) {
-								$query = "SELECT * FROM daftar_pkt INNER JOIN anggota ON daftar_pkt.nim=anggota.nim ORDER BY nama LIMIT 10";
-							}elseif ($status=="anggota"){
-								$query = " SELECT * FROM daftar_pkt INNER JOIN anggota ON daftar_pkt.nim=anggota.nim WHERE anggota.nim='".$anggota->nim."'";
-							}elseif ($status=="dosen"){
-								$query = " SELECT * FROM daftar_pkt INNER JOIN anggota ON daftar_pkt.nim=anggota.nim INNER JOIN dosen ON anggota.id_wali=dosen.id_wali WHERE dosen.id_wali='".$dosen->id_wali."'";
+							// Assign a query
+							if ($status=="petugas") {
+								$query = "SELECT * FROM daftar_pkt INNER JOIN anggota ON daftar_pkt.nim=anggota.nim INNER JOIN lab ON anggota.idlab=lab.idlab ORDER BY lab.id_lab LIMIT 10";
+							}elseif ($status=="dosen") {
+								$query = "SELECT * FROM daftar_pkt INNER JOIN anggota ON daftar_pkt.nim=anggota.nim INNER JOIN lab ON anggota.idlab=lab.idlab WHERE anggota.id_wali=dosen.id_wali";
 							}
+							
+							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
 								die('Could not connect to database : <br/>'.$con->error);
@@ -180,23 +177,19 @@
 							while($row = $result->fetch_object()){
 								echo "<tr>";
 								echo "<td>".$i."</td>";$i++;
-								echo "<td>".$row->nama."</td>";
 								echo "<td>".$row->nim."</td>";
-								// echo "<td>".$row->nama_wali."</td>";
-								// echo "<td>".$row->angkatan."</td>";
-								echo "<td>".$row->pilihan1."</td>";
-								echo "<td>".$row->pilihan2."</td>";
-								echo "<td>".$row->pilihan3."</td>";
-								if ($status=="anggota") {
-									echo "<td align='center'>
-										<a href='edit_daftar_pkt.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
-									 </td>";	
-								}else {
-									echo "<td align='center'>
-										<a href='edit_daftar_pkt.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
-										<a href='delete_pkt.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;
-									 </td>";	
-								}
+								echo "<td>".$row->nama."</td>";
+								echo "<td>".$row->id_lab."</td>";
+								echo "<td>
+										<a href='input_judul_pkt.php?nim=".$row->nim."'><button class='btn btn-info'>Input Judul PKT</button></a>
+									 </td>";
+								if ($status=="petugas") {
+								echo "<td align='center'>
+										<a href='edit_lab.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
+										<a href='delete_penempatan.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;
+									 </td>";
+								}		
+								
 								echo "</tr>";
 							}			
 						?>
@@ -206,7 +199,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+
 <?php 
 	mysqli_close($con);
 	include_once('footer.php');

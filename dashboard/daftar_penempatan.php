@@ -110,7 +110,7 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="col-md-9 col-sm-12 col-xs-12">
-					Search : <input class="form-control" type="text" name="search" placeholder="Masukkan nama, nim," id="search" autofocus value="<?php if(isset($_GET['search'])) echo $_GET['search']; ?>"/>
+					Search : <input class="form-control" type="text" name="search" placeholder="Masukkan nama, nim," id="search" value="<?php if(isset($_GET['search'])) echo $_GET['search']; ?>"/>
 				</div>
 				<div class="col-md-2 col-sm-12 col-xs-12">
 					Page :
@@ -147,14 +147,18 @@
 								<th>No</th>
 								<th>NIM</th>
 								<th>Nama</th>
-								<th>Laboratorium</th>					
-								<th>Action</th>
+								<th>Laboratorium</th>
+								<?php 
+									if ($status=="petugas") {
+										echo "<th>Action</th>";
+									}
+							    ?>
 							</tr>
 						</thead>
 						<tbody id="hasil_cari">
 						<?php
 							// Assign a query
-							$query = "SELECT * FROM penempatan INNER JOIN anggota ON penempatan.nim=anggota.nim ORDER BY nama LIMIT 10";
+							$query = "SELECT * FROM penempatan INNER JOIN anggota ON penempatan.nim=anggota.nim INNER JOIN lab ON anggota.idlab=lab.idlab ORDER BY lab.id_lab LIMIT 10";
 							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
@@ -166,11 +170,14 @@
 								echo "<td>".$i."</td>";$i++;
 								echo "<td>".$row->nim."</td>";
 								echo "<td>".$row->nama."</td>";
-								echo "<td>".$row->id_lab."</td>";		
-								echo "<td>
+								echo "<td>".$row->id_lab."</td>";
+								if ($status=="petugas") {
+								echo "<td align='center'>
 										<a href='edit_lab.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
 										<a href='delete_penempatan.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;
 									 </td>";
+								}		
+								
 								echo "</tr>";
 							}			
 						?>

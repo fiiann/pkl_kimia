@@ -33,7 +33,7 @@
                 <a class="navbar-brand" hKeloref="index.php"><i class="fa fa-thumbs-o-up"></i> <?php echo $site_name ?></a> 
             </div>
 			<div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;">
-				<a href="profil.php" title='Ubah Password' style="color:#fff; font-size:12px;"><i class="fa fa-lock"></i> <?php if($status=="petugas") echo $petugas->nama; else echo $anggota->nama; ?> </a>&nbsp;&nbsp;
+				<a href="profil.php" title='Ubah Password' style="color:#fff; font-size:12px;"><i class="fa fa-lock"></i> <?php if($status=="petugas") echo $petugas->nama; elseif($status=="dosen") echo $dosen->nama_dosen;elseif($status=="lab") echo $lab->nama_lab; else echo $anggota->nama; ?> </a>&nbsp;&nbsp;
 				<a style="text-decoration: none; color:#fff; font-size:12px;"> <?php
 					echo " ( ".date("D, Y-m-d") . " ". date("h:ia")." )&nbsp;&nbsp;";
 				?>
@@ -58,12 +58,13 @@
 						<ul class="nav nav-second-level">
 							<li><a href="p_daftar_pkt.php">Pendaftaran PKT</a></li>
 							<li><a href="daftar_pkt.php">Daftar Mahasiswa PKT</a></li>
-							
+							<li><a href="daftar_input_judul.php">Input Judul Mahasiswa PKT</a></li>
+							<li><a href="daftar_judul.php">Daftar Judul Mahasiswa PKT</a></li>
 							<li><a href="mhs_lab.php">Input penempatan mahasiswa</a></li>
 							<li><a href="daftar_penempatan.php">Daftar penempatan mahasiswa</a></li>
 							<li><a href="bimbingan.php">Input bimbingan mahasiswa</a></li>
 							<li><a href="daftar_bimbingan.php">Daftar bimbingan mahasiswa</a></li>
-							<li><a href="input_nilai_pkt.php">Input nilai PKT</a></li>
+							<li><a href="input_nilai_pkt1.php">Input nilai PKT</a></li>
 							<li><a href="nilai_pkt.php">Daftar Nilai PKT</a></li>
 						</ul>
 					</li>
@@ -87,7 +88,7 @@
 						<ul class="nav nav-second-level">
 							<li><a href="p_daftar_pkt.php">Pendaftaran PKT</a></li>
 							<li><a href="daftar_pkt.php">Daftar Mahasiswa PKT</a></li>
-							
+							<li><a href="daftar_judul.php">Daftar Judul Mahasiswa PKT</a></li>
 							
 							<li><a href="daftar_penempatan.php">Daftar penempatan mahasiswa</a></li>
 							
@@ -95,52 +96,98 @@
 							
 							<li><a href="nilai_pkt.php">Daftar Nilai PKT</a></li>
 						</ul>
-					</li>
-					<li>
-						<a href="#"><i class="fa fa-edit fa-2x"></i> Informasi<span class="fa arrow"></span></a>
+					</li>';
+				}elseif ($status=="dosen") {
+					echo '<li>
+						<a href="#"><i class="fa fa-edit fa-2x"></i> Kelola PKT<span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level">
-							<li><a href="daftar_petugas.php">Data Petugas</a></li>
-							<li><a href="tambah_petugas.php">Tambah Petugas</a></li>
+							
+							<li><a href="daftar_pkt.php">Daftar Mahasiswa PKT</a></li>
+							
+							
+							<li><a href="daftar_penempatan.php">Daftar penempatan mahasiswa</a></li>
+							
+							<li><a href="daftar_bimbingan.php">Daftar bimbingan mahasiswa</a></li>
+							<li><a href="daftar_input_judul.php">Input Judul Mahasiswa PKT</a></li>
+							<li><a href="daftar_judul.php">Daftar Judul Mahasiswa PKT</a></li>
+							<li><a href="input_nilai_pkt.php">Input Nilai PKT</a></li>
+							<li><a href="nilai_pkt.php">Daftar Nilai PKT</a></li>
+						</ul>
+					</li>';
+				}elseif ($status=="lab") {
+					echo '<li>
+						<a href="#"><i class="fa fa-edit fa-2x"></i> Kelola PKT<span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level">
+							
+							<li><a href="daftar_pkt.php">Daftar Mahasiswa PKT</a></li>
+							<li><a href="bimbingan.php">Input bimbingan mahasiswa</a></li>
+							<li><a href="mhs_lab.php">Input penempatan mahasiswa</a></li>
+							
+							<li><a href="daftar_penempatan.php">Daftar penempatan mahasiswa</a></li>
+							
+							<li><a href="daftar_bimbingan.php">Daftar bimbingan mahasiswa</a></li>
+							<li><a href="daftar_judul.php">Daftar Judul Mahasiswa PKT</a></li>
+							<li><a href="nilai_pkt.php">Daftar Nilai PKT</a></li>
 						</ul>
 					</li>';
 				}
 				?>				
 				<li> 
 						<?php
-							if($status=='petugas'){
-								echo '<a href="#"><i class="fa fa-edit fa-2x"></i> Kelola TR1';
-							}else{
-								echo '<a href="#"><i class="fa fa-book fa-2x"></i> Kelola TR1';
-							}
+							echo '<a href="#"><i class="fa fa-book fa-2x"></i> Kelola TR1';	
 						?>
 					<span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
-						<li><a href="pendaftaran_tr1.php">Pendaftaran TR1</a></li>
+						<?php
+							if(($status=='petugas')||($status=='anggota')){
+								echo '<li><a href="pendaftaran_tr1.php">Pendaftaran TR1</a></li>';
+							}
+						?>
 						<li><a href="daftar_tr1.php">Daftar Mahasiswa TR1</a></li>
+						<li><a href="daftar_nilai_tr1_real.php">Daftar Nilai TR1</a></li>
+						<li><a href="daftar_nilai_progress.php">Daftar Nilai Progress</a></li>
+						<li><a href="daftar_nilai_outline.php">Daftar Nilai Outline</a></li>
 				<?php
-					if($status=='anggota'){
-						echo '<li><a href="peminjaman_anggota.php">Nilai TR1</a></li>';
+					if($status=='dosen'){
+						echo '<li><a href="daftar_input_outline.php">Input Nilai Outline</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Input Nilai Progress</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Input Berita Acara Outline</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Input Berita Acara Progress</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Berita Acara Outline</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Berita Acara Progress</a></li>';
+						echo '<li><a href="daftar_nilai_tr1.php">Input Nilai TR1</a></li>';
 					}
+					
 				?>
 				<?php
 					if($status=='petugas'){
-						echo '<li><a href="anggota_pinjam.php">Input Nilai</a></li>';
+						echo '<li><a href="daftar_input_outline.php">Input Nilai Outline</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Input Nilai Progress</a></li>';
+						// echo '<li><a href="daftar_nilai_outline.php">Daftar Nilai Outline</a></li>';
+						// echo '<li><a href="daftar_nilai_progress.php">Daftar Nilai Progress</a></li>';
+						echo '<li><a href="daftar_nilai_tr1.php">Input Nilai TR1</a></li>';
+						// echo '<li><a href="daftar_nilai_tr1_real.php">Daftar Nilai TR1</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Input Berita Acara Outline</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Input Berita Acara Progress</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Berita Acara Outline</a></li>';
+						echo '<li><a href="input_nilai_progress.php">Berita Acara Progress</a></li>';
 					}
 				?>
 					</ul>
 				</li>  
-				<?php
-					if($status=='petugas'){
-					echo '<li>
-						<a href="#"><i class="fa fa-edit fa-2x"></i>Informasi<span class="fa arrow"></span></a>
-						<ul class="nav nav-second-level">
-							<li><a href="dosen_lab.php">Daftar Lab Pembimbing</a></li>
-							<li><a href="input_jadwal.php">Input Jadwal</a></li>
-							<li><a href="daftar_jadwal.php">Daftar Jadwal</a></li>
-						</ul>
-					</li>  ';
-					}
-				?>
+				<li>
+					<a href="#"><i class="fa fa-edit fa-2x"></i>Informasi<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><a href="dosen_lab.php">Daftar Lab Pembimbing</a></li>
+						<?php if($status=='petugas') {
+							echo "<li><a href='input_jadwal.php'>Input Jadwal</a></li>";
+							} ?>
+						<li><a href="daftar_jadwal.php">Daftar Jadwal</a></li>
+					</ul>
+					
+				</li>
+				
+				
 					<li>
                         <a  href="http://localhost/sip/index.php#about"><i class="fa fa-square-o fa-2x"></i> About</a>
 					</li>	

@@ -7,7 +7,35 @@
 	$sukses=TRUE;
 
 	// eksekusi tombol daftar
-	if (isset($_POST['daftar'])) {
+	if (!isset($_POST['daftar'])) {
+
+		if($_GET['nim']==""){
+			header('Location:./daftar_nilai_tr1.php');
+		}
+		
+		$nim=$_GET['nim'];
+		$nilai_total = $_GET['nilai_total'];
+		$jumlah_total = $_GET['jumlah_total'];
+		$laporan = $_GET['laporan'];
+		$kinerja = $_GET['kinerja'];
+		
+		$query = " SELECT * FROM nilai_outline INNER JOIN nilai_progress ON nilai_outline.nim=nilai_progress.nim INNER JOIN anggota ON nilai_outline.nim=anggota.nim INNER JOIN nilai_tr1 ON anggota.nim=nilai_tr1.nim WHERE nilai_outline.nim='".$nim."'";
+		// Execute the query
+		$result = $con->query( $query );
+
+		if (!$result){
+			die ("Could not query the database: <br />". $con->error);
+		}else{
+			while ($row = $result->fetch_object()){
+				$nim=$row->nim;
+				// $nama=$row->nama;
+				$nilai_total = $row->nilai_total;
+				$jumlah_total = $row->jumlah_total;
+				$laporan = $row->laporan;
+				$kinerja = $row->kinerja;
+			}
+		}
+	}else{
 		// Cek Nim
 		$nim=test_input($_POST['nim']);
 		if ($nim=='') {
@@ -27,7 +55,8 @@
 				$validNim = TRUE;
 			}
 		}
-		// Cek Nilai praktikum
+		
+		
 		$nilai_praktikum=test_input($_POST['nilai_praktikum']);
 		if ($nilai_praktikum=='') {
 			$errornilai_praktikum='wajib diisi';
@@ -53,6 +82,8 @@
 		}else{
 				$validnilai_presentasi = TRUE;
 			 }
+		// Cek Nilai praktikum
+		
 		
 
 		// jika tidak ada kesalahan input
@@ -61,9 +92,20 @@
 			$nilai_praktikum=$con->real_escape_string($nilai_praktikum);
 			$nilai_laporan=$con->real_escape_string($nilai_laporan);
 			$nilai_presentasi=$con->real_escape_string($nilai_presentasi);
-			
+			$nilai_akhir = (60/100*$nilai_praktikum)+(30/100*$nilai_laporan)+(10/100*$nilai_presentasi);
+			if ($nilai_akhir <= 100 && $nilai_akhir >= 80) {
+				$huruf = "A";
+			}elseif ($nilai_akhir < 80 && $nilai_akhir >= 60) {
+				$huruf = "B";
+			}elseif ($nilai_akhir < 60 && $nilai_akhir >= 40) {
+				$huruf = "C";
+			}elseif ($nilai_akhir < 40) {
+				$huruf = "D";
+			}else {
+				$huruf ="N/A";
+			} 						
 
-			$query = "INSERT INTO nilai_pkt (nim, nilai_praktikum, nilai_laporan, nilai_presentasi) VALUES ('".$nim."',$nilai_praktikum,$nilai_laporan,$nilai_presentasi)";
+			$query = "INSERT INTO nilai_pkt (nim, nilai_praktikum, nilai_laporan, nilai_presentasi, nilai_pkt,nilai_huruf) VALUES ('".$nim."',$nilai_praktikum,$nilai_laporan,$nilai_presentasi,$nilai_akhir,'".$huruf."')";
 
 			$hasil=$con->query($query);
 			if (!$hasil) {
@@ -72,6 +114,7 @@
 				$sukses=TRUE;
 			}
 			$pesan_sukses="Berhasil menambahkan data.";
+
 		}
 		else{
 			$sukses=FALSE;
@@ -99,7 +142,7 @@
 							<span class="label label-success"><?php if(isset($pesan_sukses)) echo $pesan_sukses;?></span>
 							<div class="form-group">
 								<label>NIM</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorNim)) echo $errorNim;?></span>
-								<input class="form-control" type="text" name="nim" maxlength="14" size="30" placeholder="nim 14 digit angka" required autofocus value="<?php if(!$sukses&&$validNim){echo $nim;} ?>">
+								<input class="form-control" type="text" name="nim" maxlength="14" size="30" readonly placeholder="nim 14 digit angka" required autofocus value="<?php if(isset($nim)){echo $nim;} ?>">
 							</div>
 							<div class="form-group">
 								<label>Nilai Praktikum (60%)</label>&nbsp;<span class="label label-warning">* <?php if(isset($errornilai_praktikum)) echo $errornilai_praktikum;?></span>
@@ -114,10 +157,15 @@
 								<input class="form-control" type="text" name="nilai_presentasi" maxlength="3" size="30" placeholder="0-100" required autofocus value="<?php if(!$sukses&&$validnilai_presentasi){echo $nilai_presentasi;} ?>">
 							</div>
 							
+					
 							<div class="form-group">
 								<input class="form-control" type="submit" name="daftar" value="Input">
 							</div>
+							
 						</form>
+						<div class="form-group">
+								<a href="nilai_pkt.php"><button class="btn btn-info">Kembali ke Daftar Nilai PKT</button></a>
+							</div>
 					</div>
 				</div>
 			</div>

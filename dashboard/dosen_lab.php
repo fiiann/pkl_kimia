@@ -1,8 +1,6 @@
 <?php		
 	include_once('sidebar.php');
-	if($status=="anggota"){
-		header('Location:./index.php');
-	}
+	$id=$_SESSION['sip_masuk_aja'];
 ?>
 <script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script>

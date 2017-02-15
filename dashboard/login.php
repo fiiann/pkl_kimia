@@ -9,6 +9,9 @@
 
 			$cekLoginPetugas = mysqli_query($con, "SELECT idpetugas FROM petugas WHERE email = '$email' AND password = '$password'");
 			$cekLoginAnggota = mysqli_query($con, "SELECT nim FROM anggota WHERE email = '$email' AND password = '$password'");
+			$cekLoginDosen = mysqli_query($con, "SELECT nip FROM dosen WHERE email = '$email' AND password = '$password'");
+			$cekLoginLab = mysqli_query($con, "SELECT idlab FROM lab WHERE email = '$email' AND password = '$password'");
+			
 			if(mysqli_num_rows($cekLoginPetugas)!=0){
 			  $fetch_user_id = mysqli_fetch_assoc($cekLoginPetugas);
 			  $_SESSION['sip_masuk_aja'] = $fetch_user_id['idpetugas'];
@@ -18,6 +21,16 @@
 			  $fetch_user_id = mysqli_fetch_assoc($cekLoginAnggota);
 			  $_SESSION['sip_masuk_aja'] = $fetch_user_id['nim'];
 			  $_SESSION['sip_status'] = "anggota";
+			  header("Location:./");
+			}elseif(mysqli_num_rows($cekLoginDosen)!=0){
+			  $fetch_user_id = mysqli_fetch_assoc($cekLoginDosen);
+			  $_SESSION['sip_masuk_aja'] = $fetch_user_id['nip'];
+			  $_SESSION['sip_status'] = "dosen";
+			  header("Location:./");
+			}elseif(mysqli_num_rows($cekLoginLab)!=0){
+			  $fetch_user_id = mysqli_fetch_assoc($cekLoginLab);
+			  $_SESSION['sip_masuk_aja'] = $fetch_user_id['idlab'];
+			  $_SESSION['sip_status'] = "lab";
 			  header("Location:./");
 			}else{
 			  $gagal = "Tidak dapat login. Silahkan cek email dan password anda kembali";

@@ -51,9 +51,11 @@
 			
 
 			$query = "INSERT INTO penempatan (id_lab, nim) VALUES ('".$lab."','".$nim."')";
+			$query2 = "UPDATE anggota SET idlab='".$lab."' WHERE nim='".$nim."'"	;
 
 			$hasil=$con->query($query);
-			if (!$hasil) {
+			$hasil2=$con->query($query2);
+			if (!($hasil)&&($hasil2)) {
 				die("Tidak dapat menjalankan query database: <br>".$con->error);
 			}else{
 				$sukses=TRUE;
@@ -93,7 +95,7 @@
 								<input class="form-control" type="text" name="lab" maxlength="14" size="30" placeholder="ex : A" required autofocus value="<?php if(!$sukses&&$validLab){echo $lab;} ?>">
 							</div> -->
 							<div class="form-group">
-											<label>lABORATORIUM</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_Lab)) echo $error_Lab;?></span>&nbsp;
+											<label>LABORATORIUM</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_Lab)) echo $error_Lab;?></span>&nbsp;
 											<select id="lab" name="lab" required>
 							<option value="none">--Pilih lab --</option>
 							<?php
@@ -103,7 +105,7 @@
 									die("Could not connect to the database : <br/>". $db->connect_error);
 								}
 								while ($row = $resultkat->fetch_object()){ 
-									$sid = $row->id_lab; 
+									$sid = $row->idlab; 
 									$sname = $row->nama_lab; 
 									echo '<option value='.$sid.' '; 
 									if(isset($lab) && $lab==$sid)

@@ -178,14 +178,10 @@
 							<!-- NIM -->
 							<div class="form-group">
 								<label>NIM</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorNim)) echo $errorNim;?></span>
-								<input class="form-control" type="text" name="nim" maxlength="14" size="30" placeholder="nim 14 digit angka" required autofocus value="<?php if(!$sukses&&$validNim){echo $nim;} ?>">
+								<input class="form-control" type="text" name="nim" <?php if ($status=='anggota') {echo 'readonly';} ?> maxlength="14" size="30" placeholder="nim 14 digit angka" required autofocus value="<?php if($status=="anggota"){echo $anggota->nim;} ?>">
 							</div>
 							
-							<!-- <div class="form-group" hidden>
-								<label>Nama</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorNama)) echo $errorNama;?></span>
-								<input class="form-control" type="text" name="nama" maxlength="50" size="30" placeholder="masukan nama" required value="<?php if(!$sukses&&$validNama){echo $nama;} ?>">
-							</div>
- -->
+						
 							<div class="form-group">
 								<label>Nilai Komulatif</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorKumulatif)) echo $errorKumulatif;?></span>
 								<input class="form-control" type="text" name="kumulatif" maxlength="50" size="30" placeholder="masukan IPK" required value="<?php if(!$sukses&&$validKumulatif){echo $kumulatif;} ?>">

@@ -74,22 +74,30 @@
 								<th>No</th>
 								<th>NIM</th>
 								<th>Nama</th>
-								<!-- <th>Kumulatif</th> -->
 								<th>SKS</th>
-								<!-- <th>KRS</th> -->
 								<th>Daftar</th>
 								<th>K. FISIK</th>
 								<th>K. ANALITIK</th>
 								<th>K. ORGANIK</th>
 								<th>K. ANORGANIK</th>
 								<th>BIOKIMIA</th>
-								<th>Action</th>
+								<?php if (($status=="petugas")||($status=="dosen")) {
+									echo "<th>Action</th>";
+								} ?>
+								
 							</tr>
 						</thead>
 						<tbody id="hasil_anggota">
 						<?php
 							// Assign a query
-							$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim ORDER BY nama LIMIT 10";
+							if (($status=="petugas")||($status=="lab")) {
+								$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim ORDER BY nama LIMIT 10";
+							}elseif ($status=="anggota") {
+								$query = " SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim WHERE anggota.nim='".$anggota->nim."'";
+							}elseif ($status=="dosen") {
+								$query = " SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim INNER JOIN dosen on anggota.id_wali=dosen.id_wali WHERE anggota.id_wali='".$dosen->id_wali."'";
+							}
+							// $query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim ORDER BY nama LIMIT 10";
 							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
@@ -105,15 +113,19 @@
 								echo "<td>".$row->sks."</td>";
 								//echo "<td>".$row->krs."</td>";
 								echo "<td>".$row->daftar."</td>";
-								echo "<td>".$row->fisik."</td>";
-								echo "<td>".$row->analitik."</td>";
-								echo "<td>".$row->organik."</td>";
-								echo "<td>".$row->anorganik."</td>";
-								echo "<td>".$row->biokimia."</td>";
-								echo "<td>
+								echo "<td align='center'>".$row->fisik."</td>";
+								echo "<td align='center'>".$row->analitik."</td>";
+								echo "<td align='center'>".$row->organik."</td>";
+								echo "<td align='center'>".$row->anorganik."</td>";
+								echo "<td align='center'>".$row->biokimia."</td>";
+								if (($status=="petugas")||($status=="dosen")){
+									echo "<td>
+										 
 										<a href='edit_daftar_tr1.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
 										<a href='delete_anggota.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;
 									 </td>";
+								}
+								// <a href='input_nilai_tr1.php?nim=".$row->nim."'><button class='btn btn-info'>Input Nilai</button></a>
 								echo "</tr>";
 							}			
 						?>

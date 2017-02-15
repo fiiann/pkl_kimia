@@ -1,6 +1,12 @@
 <?php		
 	include_once('sidebar.php');
+	if($status=="anggota"){
+		header('Location:./index.php');
+	}
 	$id=$_SESSION['sip_masuk_aja'];
+	if($con->connect_errno){
+		die("Could not connect to the database: <br />".$con->connect_error);
+	}
 ?>
 <script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
 <script>
@@ -37,7 +43,7 @@
 					Page :
 				<select class='form-control' id='page'>
 				<?php
-					$query = "SELECT count(nim) as jml_data FROM nilai_pkt";
+					$query = "SELECT count(nim) as jml_data FROM nilai_outline";
 					// Execute the query
 					$result = $con->query( $query );
 					$row = $result->fetch_object();
@@ -58,38 +64,36 @@
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-			   Nilai PKT
+				<?php 
+					if ($status=="petugas") {
+						echo "Daftar Nilai Outline";
+					}else {
+						echo "Nilai Outline";
+					}
+				 ?>
 			</div>
 			<div class="panel-body">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
-								<th rowspan="2">No</th>
-								<th rowspan="2">NIM</th>
-								<th rowspan="2">Nama</th>
-								<th colspan="5">Nilai</th>
-								<th rowspan="2">Action</th>
-							</tr>
-							<tr>
-								<th>Praktikum (60%)</th>
-								<th>Laporan (30%)</th>
-								<th>Presentasi (10%)</th>
-								<th>Akhir (100%)</th>
-								<th>Huruf</th>
+								<th>No</th>
+								<th>NIM</th>
+								<th>Nama</th>
+								<th>Input Nilai</th>
 							</tr>
 						</thead>
 						<tbody id="hasil_anggota">
 						<?php
 							// Assign a query
 							if ($status=="petugas") {
-								$query = "SELECT * FROM nilai_pkt INNER JOIN anggota ON nilai_pkt.nim=anggota.nim ORDER BY nama LIMIT 10";
+								$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim ORDER BY nama LIMIT 10";	
+							}elseif ($status=="anggota"){
+								$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim WHERE daftar_tr1.nim='".$anggota->nim."'";
 							}elseif ($status=="dosen"){
-								$query = "SELECT * FROM nilai_pkt INNER JOIN anggota ON nilai_pkt.nim=anggota.nim INNER JOIN dosen ON anggota.id_wali=dosen.id_wali WHERE anggota.id_wali='".$dosen->id_wali."'";
+								$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim INNER JOIN dosen ON anggota.id_wali=dosen.id_wali WHERE anggota.id_wali='".$dosen->id_wali."'";
 							}elseif ($status=="lab"){
-								$query = "SELECT * FROM nilai_pkt INNER JOIN anggota ON nilai_pkt.nim=anggota.nim INNER JOIN lab ON anggota.idlab=lab.idlab WHERE anggota.idlab='".$lab->idlab."'";
-							}else{
-								$query = "SELECT * FROM nilai_pkt INNER JOIN anggota ON nilai_pkt.nim=anggota.nim WHERE nilai_pkt.nim='".$anggota->nim."'";
+								$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim INNER JOIN lab ON anggota.idlab=lab.idlab WHERE anggota.idlab='".$lab->idlab."'";
 							}
 							
 							// Execute the query
@@ -98,21 +102,13 @@
 								die('Could not connect to database : <br/>'.$con->error);
 							}
 							$i=1;
-							// $row=$result->fetch_object();
-							// $nilai_akhir=$row->nilai_praktikum;
 							while($row = $result->fetch_object()){
-								echo "<tr>";
+								echo "<tr align='center'>";
 								echo "<td>".$i."</td>";$i++;
 								echo "<td>".$row->nim."</td>";
 								echo "<td>".$row->nama."</td>";
-								echo "<td align='center'>".$row->nilai_praktikum."</td>";
-								echo "<td align='center'>".$row->nilai_laporan."</td>";
-								echo "<td align='center'>".$row->nilai_presentasi."</td>";
-								echo "<td align='center'>".$row->nilai_pkt."</td>";
-								echo "<td align='center'>".$row->nilai_huruf."</td>";
-								echo "<td align='center'>
-										<a href='edit_nilaipkt.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
-										<a href='delete_nilaipkt.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;
+								echo "<td>
+										<a href='input_nilai_outline.php?nim=".$row->nim."'><button class='btn btn-info'>Input Nilai Outline</button></a>
 									 </td>";
 								echo "</tr>";
 							}			

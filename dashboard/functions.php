@@ -26,6 +26,18 @@
 			$anggota=mysqli_query($con,$query); 
 			$anggota=$anggota->fetch_object();
 			$status=$_SESSION['sip_status'];
+		}elseif($_SESSION['sip_status']=='dosen'){
+			$query = "SELECT * FROM dosen WHERE nip=".$_SESSION['sip_masuk_aja']."";
+			$dosen=mysqli_query($con,$query); 
+			$dosen=$dosen->fetch_object();
+			$status=$_SESSION['sip_status'];
+		}elseif($_SESSION['sip_status']=='lab'){
+			$query = "SELECT * FROM lab WHERE idlab=".$_SESSION['sip_masuk_aja']."";
+			$lab=mysqli_query($con,$query); 
+			$lab=$lab->fetch_object();
+			$status=$_SESSION['sip_status'];
+		}else {
+			echo "Harap ulangi login";
 		}
 	}
 
@@ -36,14 +48,5 @@
 		return $data;
 	}
 	
-	function hitungdenda($pinjam, $kembali){
-		$selisih = ((abs(strtotime ($kembali) - strtotime ($pinjam)))/(60*60*24));
-		if ($selisih <= 14){
-			$selisih = 0;
-		}else{
-			$selisih = ($selisih-14) * 1000;
-		}
-		return $selisih;
-	}
 	
 ?>

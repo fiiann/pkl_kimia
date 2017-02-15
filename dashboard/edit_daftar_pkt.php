@@ -86,7 +86,7 @@
 
 			$hasil=$con->query($query);
 			if (!$hasil) {
-				die("Tidak dapat menjalankan query database: <br>".$con->error);
+				die("Tidak dapat menjalankan query date(format)abase: <br>".$con->error);
 			}else{
 				$sukses=TRUE;
 				echo "<br/>Berhasil edit data";

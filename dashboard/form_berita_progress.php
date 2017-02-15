@@ -42,7 +42,7 @@
 	$pdf->Cell(0,5,'Penguji',0,1,'L');
 	$pdf->Cell(10,8,'No.',1,0,'C');$pdf->Cell(90,8,'Nama',1,0,'C');$pdf->Cell(40,8,'Jabatan',1,0,'C');$pdf->Cell(30,8,'Tanda Tangan',1,0,'C');$pdf->Cell(20,8,'Nilai',1,1,'C');
 	$pdf->Cell(10,8,'1',1,0,'C');$pdf->Cell(90,8,'',1,0,'C');$pdf->Cell(40,8,'Pembimbing I',1,0,'C');$pdf->Cell(30,8,'',1,0,'C');$pdf->Cell(20,8,'',1,1,'C');
-	$pdf->Cell(10,8,'2',1,0,'C');$pdf->Cell(90,8,'',1,0,'C');$pdf->Cell(40,8,'Pembimbing II',1,0,'C');$pdf->Cell(30,8,'',1,0,'C');$pdf->Cell(20,8,'',1,1,'C');
+	$pdf->Cell(10,8,'2',1,0,'C');$pdf->Cell(90,8,'',1,0,'C');$pdf->Cell(40,8,'Pembimbing iis_add_server(path, comment, server_ip, port, host_name, rights, start_server)',1,0,'C');$pdf->Cell(30,8,'',1,0,'C');$pdf->Cell(20,8,'',1,1,'C');
 	$pdf->Cell(10,8,'3',1,0,'C');$pdf->Cell(90,8,'',1,0,'C');$pdf->Cell(40,8,'',1,0,'C');$pdf->Cell(30,8,'',1,0,'C');$pdf->Cell(20,8,'',1,1,'C');
 	$pdf->Cell(10,8,'4',1,0,'C');$pdf->Cell(90,8,'',1,0,'C');$pdf->Cell(40,8,'',1,0,'C');$pdf->Cell(30,8,'',1,0,'C');$pdf->Cell(20,8,'',1,1,'C');
 	$pdf->Cell(10,8,'5',1,0,'C');$pdf->Cell(90,8,'',1,0,'C');$pdf->Cell(40,8,'',1,0,'C');$pdf->Cell(30,8,'',1,0,'C');$pdf->Cell(20,8,'',1,1,'C');

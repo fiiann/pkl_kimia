@@ -70,7 +70,7 @@
 								<th>No</th>
 								<th>NIM</th>
 								<th>Nama</th>
-								<th>Alamat</th>
+								<!-- <th>Alamat</th> -->
 								<th>Kota</th>
 								<!-- <th>Email</th> -->
 								<th>No Telp.</th>
@@ -82,7 +82,7 @@
 						<tbody id="hasil_anggota">
 						<?php
 							// Assign a query
-							$query = "SELECT * FROM anggota INNER JOIN perwalian ON anggota.id_wali=perwalian.id_wali ORDER BY nama LIMIT 10";
+							$query = "SELECT * FROM anggota INNER JOIN dosen ON anggota.id_wali=dosen.id_wali ORDER BY nama LIMIT 10";
 							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
@@ -94,11 +94,11 @@
 								echo "<td>".$i."</td>";$i++;
 								echo "<td>".$row->nim."</td>";
 								echo "<td>".$row->nama."</td>";
-								echo "<td>".$row->alamat."</td>";
+								// echo "<td>".$row->alamat."</td>";
 								echo "<td>".$row->kota."</td>";
 								// echo "<td>".$row->email."</td>";
 								echo "<td>".$row->no_telp."</td>";
-								echo "<td>".$row->nama_wali."</td>";
+								echo "<td>".$row->nama_dosen."</td>";
 								echo "<td>".$row->angkatan."</td>";
 								echo "<td>
 										<a href='edit_anggota.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;

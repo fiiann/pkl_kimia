@@ -9,7 +9,9 @@
 		header('Location:./index.php');
 	}
 	
-	$errorNilai='';
+	$errorNilai_prak='';
+	$errorNilai_lap='';
+	$errorNilai_presentasi='';
 	
 	
 	$sukses=TRUE;
@@ -28,29 +30,47 @@
 		}else{
 			while ($row = $result->fetch_object()){
 				// $nim=$row->nim;
-				$nilai_pkt = $row->nilai_pkt;
+				$nilai_prak = $row->nilai_praktikum;
+				$nilai_lap = $row->nilai_laporan;
+				$nilai_presentasi = $row->nilai_presentasi;
 			}
 		}
 	}else{
 		// Cek Nama
 		
 		$nim=test_input($_POST['nim']);
-		$nilai_pkt=test_input($_POST['nilai_pkt']);
-		if ($nilai_pkt=='') {
-			$errorNilai='wajib diisi';
-			$validNilai=FALSE;
+		$nilai_prak=test_input($_POST['nilai_prak']);
+		if ($nilai_prak=='') {
+			$errorNilai_prak='wajib diisi';
+			$validNilai_prak=FALSE;
 		}else{
-			$validNilai=TRUE;
+			$validNilai_prak=TRUE;
 		}
-		
-	
-		
-		// jika tidak ada kesalahan input
-		if ($validNilai) {
-			
-			$nilai_pkt=$con->real_escape_string($nilai_pkt);
 
-			$query = "UPDATE nilai_pkt SET  nilai_pkt='".$nilai_pkt."' WHERE nim='".$nim."'";
+		$nilai_lap=test_input($_POST['nilai_lap']);
+		if ($nilai_lap=='') {
+			$errorNilai_lap='wajib diisi';
+			$validNilai_lap=FALSE;
+		}else{
+			$validNilai_lap=TRUE;
+		}
+	
+		$nilai_presentasi=test_input($_POST['nilai_presentasi']);
+		if ($nilai_presentasi=='') {
+			$errorNilai_presentasi='wajib diisi';
+			$validNilai_presentasi=FALSE;
+		}else{
+			$validNilai_presentasi=TRUE;
+		}
+
+		// jika tidak ada kesalahan input
+		if ($validNilai_prak && $validNilai_lap && $validNilai_presentasi) {
+			
+			$nilai_prak=$con->real_escape_string($nilai_prak);
+			$nilai_lap=$con->real_escape_string($nilai_lap);
+			$nilai_presentasi=$con->real_escape_string($nilai_presentasi);
+
+			$query = "UPDATE nilai_pkt SET  nilai_praktikum='".$nilai_prak."', nilai_laporan='".$nilai_lap."',nilai_presentasi='".$nilai_presentasi."' WHERE nim='".$nim."'";
 
 			$hasil=$con->query($query);
 			if (!$hasil) {
@@ -81,10 +101,21 @@
 								<input class="form-control" type="text" name="nim" maxlength="14" size="30" value="<?php echo $nim; ?>">
 							</div>
 							<div class="form-group">
-								<label>Nilai</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorNilai)) echo $errorNilai;?></span>
-								<input class="form-control" type="text" name="nilai_pkt" maxlength="50" size="30" placeholder="edit nilai" required value="<?php if(isset($nilai_pkt)){echo $nilai_pkt;} ?>">
+								<label>Nilai Praktikum</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorNilai_prak)) echo $errorNilai_prak;?></span>
+								<input class="form-control" type="text" name="nilai_prak" maxlength="50" size="30" placeholder="edit nilai" required value="<?php if(isset($nilai_prak)){echo $nilai_prak;} ?>">
 							</div>
 							
+							<div class="form-group">
+								<label>Nilai Laporan</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorNilai_lap)) echo $errorNilai_lap;?></span>
+								<input class="form-control" type="text" name="nilai_lap" maxlength="50" size="30" placeholder="edit nilai" required value="<?php if(isset($nilai_lap)){echo $nilai_lap;} ?>">
+							</div>
+
+							<div class="form-group">
+								<label>Nilai Presentasi</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorNilai_presentasi)) echo $errorNilai_presentasi;?></span>
+								<input class="form-control" type="text" name="nilai_presentasi" maxlength="50" size="30" placeholder="edit nilai" required value="<?php if(isset($nilai_presentasi)){echo $nilai_presentasi;} ?>">
+							</div>
+
+
 							<div class="form-group">
 								<input class="form-control" type="submit" name="edit" value="Update Data">-
 							</div>

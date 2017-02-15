@@ -2,6 +2,10 @@
 	include_once('sidebar.php'); 
 	if($status=='petugas'){
 			$pesanWelcome='"Mari berikan layanan yang SIP bagi setiap pengunjung"';
+	}elseif($status=='dosen'){
+			$pesanWelcome='Selamat datang Dosen Kimia';
+	}elseif($status=='lab'){
+			$pesanWelcome='Selamat datang Admin Lab';
 	}else{
 			$pesanWelcome='"Banyak baca buku biar makin SIP"';
 	}
@@ -25,7 +29,7 @@
 <div class="row">
     <div class="col-md-12">
         <h2>Dashboard</h2>   
-        <h5>Selamat datang <b><?php if($status=="petugas") echo $petugas->nama; else echo $anggota->nama; ?></b>. <small><i><?php echo $pesanWelcome ?></i></small></h5>
+        <h5>Selamat datang <b><?php if($status=="petugas") echo $petugas->nama; elseif($status=="dosen") echo $dosen->nama_dosen;elseif($status=="lab") echo $lab->nama_lab; else echo "$anggota->nama"; ?></b>. <small><i><?php echo $pesanWelcome ?></i></small></h5>
     </div>
 </div><hr />
  <div class="row">
@@ -47,7 +51,7 @@
 							</span>
 							<div class="text-box" >
 
-								<div class="main-text"><?php if($status=='anggota') echo $jml_tr1;else echo $jml_tr1; ?></div>
+								<div class="main-text"><?php if(($status=='anggota')||($status=='lab')) echo $jml_tr1;else echo $jml_tr1; ?></div>
 								<div class="text-muted"><?php if($status=='anggota') echo 'Pernah dipinjam'; else echo 'Mahasiswa TR1'; ?></div>
 							</div>
 						 </div>
@@ -59,7 +63,7 @@
 							</span>
 							<div class="text-box" >
 								<div class="main-text"><?php if($status=='anggota') echo $belum_kembali; else echo $jml_anggota; ?></div>
-								<div class="text-muted"><?php if($status=='anggota') echo 'Belum kembali'; else echo 'Anggota'; ?></div>
+								<div class="text-muted"><?php if($status=='anggota') echo 'Belum kembali'; elseif ($status=='dosen') echo 'apa ini'; else echo 'Anggota'; ?></div>
 							</div>
 						 </div>
 					</div>
