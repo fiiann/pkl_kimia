@@ -75,7 +75,7 @@
 						<tbody id="hasil_anggota">
 						<?php
 							// Assign a query
-							$query = "SELECT * FROM dosen INNER JOIN lab ON dosen.id_lab=lab.id_lab ORDER BY nama_dosen LIMIT 10";
+							$query = "SELECT * FROM dosen INNER JOIN lab ON dosen.idlab=lab.idlab ORDER BY nama_dosen LIMIT 10";
 							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
