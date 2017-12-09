@@ -2,5 +2,5 @@
   $db_host="localhost";
   $db_username="root";
   $db_password="";
-  $db_database="db_sip";
+  $db_database="db_pkl";
 ?>

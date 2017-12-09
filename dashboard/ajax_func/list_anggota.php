@@ -32,5 +32,5 @@ require_once('functions.php');
 				<a href='delete.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>
 			 </td>";
 		echo "</tr>";
-	}			
+	}
 ?>

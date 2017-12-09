@@ -21,7 +21,7 @@ $row = $result->fetch_object();
 			echo '</tr>';
 		echo '</table>';
 		echo '<br />';
-		echo 'Apakah anda yakin ingin menghapus data buku ini? <a href="del.php?data=petugas&id='.$id.'">YA</a> / <a href="daftar_petugas.php">TIDAK</a>';
+		echo 'Apakah anda yakin ingin menghapus data petugas ini? <a href="del.php?data=petugas&id='.$id.'">YA</a> / <a href="daftar_petugas.php">TIDAK</a>';
 		$con->close();
 ?>
 <?php

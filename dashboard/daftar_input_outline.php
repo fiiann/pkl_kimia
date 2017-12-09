@@ -1,4 +1,4 @@
-<?php		
+<?php
 	include_once('sidebar.php');
 	if($status=="anggota"){
 		header('Location:./index.php');
@@ -21,7 +21,7 @@
 				url:"ajax_func/list_anggota.php?page="+page,
 				type:"GET",
 				dataType:"html",
-				
+
 				beforeSend: function(){
 					$("#hasil_anggota").html('<img src="assets/img/loader.gif" height="20px"/>');
 				},
@@ -43,7 +43,7 @@
 					Page :
 				<select class='form-control' id='page'>
 				<?php
-					$query = "SELECT count(nim) as jml_data FROM nilai_outline";
+					$query = "SELECT count(nim) as jml_data FROM tr1";
 					// Execute the query
 					$result = $con->query( $query );
 					$row = $result->fetch_object();
@@ -64,7 +64,7 @@
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<?php 
+				<?php
 					if ($status=="petugas") {
 						echo "Daftar Nilai Outline";
 					}else {
@@ -87,15 +87,15 @@
 						<?php
 							// Assign a query
 							if ($status=="petugas") {
-								$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim ORDER BY nama LIMIT 10";	
+								$query = "SELECT * FROM tr1 INNER JOIN mahasiswa m ON tr1.nim=m.nim ORDER BY nama LIMIT 10";
 							}elseif ($status=="anggota"){
-								$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim WHERE daftar_tr1.nim='".$anggota->nim."'";
+								$query = "SELECT * FROM tr1 INNER JOIN mahasiswa m ON tr1.nim=m.nim WHERE tr1.nim='".$anggota->nim."'";
 							}elseif ($status=="dosen"){
-								$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim INNER JOIN dosen ON anggota.id_wali=dosen.id_wali WHERE anggota.id_wali='".$dosen->id_wali."'";
+								$query = "SELECT * FROM tr1 INNER JOIN mahasiswa m ON tr1.nim=m.nim INNER JOIN dosen ON anggota.id_wali=dosen.id_wali WHERE anggota.id_wali='".$dosen->id_wali."'";
 							}elseif ($status=="lab"){
-								$query = "SELECT * FROM daftar_tr1 INNER JOIN anggota ON daftar_tr1.nim=anggota.nim INNER JOIN lab ON anggota.idlab=lab.idlab WHERE anggota.idlab='".$lab->idlab."'";
+								$query = "SELECT * FROM tr1 INNER JOIN mahasiswa m ON tr1.nim=m.nim INNER JOIN lab ON anggota.idlab=lab.idlab WHERE anggota.idlab='".$lab->idlab."'";
 							}
-							
+
 							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
@@ -111,7 +111,7 @@
 										<a href='input_nilai_outline.php?nim=".$row->nim."'><button class='btn btn-info'>Input Nilai Outline</button></a>
 									 </td>";
 								echo "</tr>";
-							}			
+							}
 						?>
 						</tbody>
 					</table>
@@ -120,7 +120,7 @@
 		</div>
 	</div>
 </div>
-<?php 
+<?php
 	mysqli_close($con);
 	include_once('footer.php');
 ?>

@@ -8,17 +8,17 @@
 	if($status=="anggota"){
 		header('Location:./index.php');
 	}
-	
+
 	$errorNama='';
 	$errorEmail='';
-	
+
 	$sukses=TRUE;
 
 	// eksekusi tombol edit
 	if(!isset($_POST['edit'])){
 		if($_GET['id']==""){
 			header('Location:./daftar_petugas.php');
-		}	
+		}
 		$id=$_GET['id'];
 		$query = " SELECT * FROM petugas WHERE idpetugas='".$id."'";
 		// Execute the query
@@ -28,7 +28,7 @@
 		}else{
 			while ($row = $result->fetch_object()){
 				$nama=$row->nama;
-				$email = $row->email;
+				$email_lama = $row->email;
 			}
 		}
 	}else{
@@ -44,7 +44,7 @@
 		}else{
 			$validNama=TRUE;
 		}
-		
+
 		// cek email
 		$email=test_input($_POST['email']);
 		if ($email=='') {
@@ -57,15 +57,15 @@
 			$result1 = $con->query( $query1 );
 			$ceknim = $result1->fetch_object();
 			$email_lawas = $result->email;
-			if($result->num_rows!=0 && $email=$email_lawas){
-				$errorEmail="email sudah pernah digunakan, harap masukkan email lain";
-				$validEmail=FALSE;
-			}
-			else{
+			// if($result->num_rows!=0 && $email=$email_lawas){
+			// 	$errorEmail="email sudah pernah digunakan, harap masukkan email lain";
+			// 	$validEmail=FALSE;
+			// }
+			// else{
 				$validEmail = TRUE;
-			}
+			// }
 		}
-		
+
 		// jika tidak ada kesalahan input
 		if ($validNama && $validEmail) {
 			$nama=$con->real_escape_string($nama);
@@ -78,7 +78,7 @@
 				die("Tidak dapat menjalankan query database: <br>".$con->error);
 			}else{
 				$sukses=TRUE;
-				echo "<br/>Berhasil";
+				$pesan_sukses="Anda berhasil mengubah data";
 			}
 		}
 		else{
@@ -90,6 +90,7 @@
 	<div class="col-md-6">
 		<!-- Form Elements -->
 		<div class="panel panel-default">
+			<span class="label label-success"><?php if(isset($pesan_sukses)) echo $pesan_sukses;?></span>
 			<div class="panel-heading">
 				Update Data Petugas
 			</div>
@@ -107,7 +108,7 @@
 							</div>
 							<div class="form-group">
 								<label>Email</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorEmail)) echo $errorEmail;?></span>
-								<input class="form-control" type="email" name="email" size="30" placeholder="example@email.com" required value="<?php if(isset($email)){echo $email;} ?>">
+								<input class="form-control" type="email" name="email" size="30" placeholder="example@email.com" required value="<?php if(isset($email_lama)){echo $email_lama;} ?>">
 							</div>
 							<div class="form-group">
 								<input class="form-control" type="submit" name="edit" value="Update Data">

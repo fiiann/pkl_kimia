@@ -5,7 +5,7 @@ if($status=="anggota"){
 		header('Location:./index.php');
 	}
 // Assign the query
-$query = " SELECT * FROM judul WHERE nim='".$nim."'";
+$query = " SELECT * FROM pkt WHERE nim='".$nim."'";
 // Execute the query
 $result = $con->query($query);
 $row = $result->fetch_object();
@@ -21,7 +21,7 @@ $row = $result->fetch_object();
 			// echo '</tr>';
 			echo '<tr>';
 				echo '<td>Judul</td>';
-				echo '<td> : '.$row->judul_pkt.'</td>';
+				echo '<td> : '.$row->judul.'</td>';
 			echo '</tr>';
 		echo '</table>';
 		echo '<br />';

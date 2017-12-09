@@ -1,6 +1,9 @@
 <?php
 	require_once('sidebar.php');
 	$id=$_SESSION['sip_masuk_aja'];
+	if(($status=="dosen")||($status=="lab")){
+		header('Location:./index.php');
+	}
 	if($con->connect_errno){
 		die("Could not connect to the database: <br />".$con->connect_error);
 	}
@@ -8,7 +11,8 @@
 	// 	header('Location:./index.php');
 	// }
 		$db=new mysqli($db_host, $db_username, $db_password, $db_database);
-
+		$query_1 = "SELECT dosen_pembimbing FROM pkt";
+		$hasil_2=$con->query($query_1);
 
 	$sukses=TRUE;
 	$errorNama='';
@@ -17,11 +21,6 @@
 	$errorSks='';
 	$errorKrs='';
 	$errorDaftar='';
-	$errorFisik='';
-	$errorAnalitik='';
-	$errorOrganik='';
-	$errorAnorganik='';
-	$errorBiokimia='';
 	// eksekusi tombol daftar
 	if (isset($_POST['submit'])) {
 		// Cek Nim
@@ -33,8 +32,10 @@
 			$errorNim='NIM harus terdiri dari 14 digit angka';
 			$validNim=FALSE;
 		}else{
-			$query = " SELECT * FROM daftar_tr1 WHERE nim='".$nim."'";
+			$query = " SELECT * FROM tr1 WHERE nim='".$nim."'";
 			$result = $con->query( $query );
+			// $query1 = "SELECT dosen_pembimbing FROM pkt WHERE nim=$nim";
+			// $hasil2=$con->query($query1);
 			if($result->num_rows!=0){
 				$errorNim="NIM sudah pernah digunakan, harap masukkan NIM lain";
 				$validNim=FALSE;
@@ -43,7 +44,7 @@
 				$validNim = TRUE;
 			}
 		}
-		
+
 		$kumulatif=test_input($_POST['kumulatif']);
 		if ($kumulatif=='') {
 			$errorKumulatif='wajib diisi';
@@ -58,7 +59,7 @@
 			$validSks=FALSE;
 		}else{
 			$validSks=TRUE;
-		}		
+		}
 
 		$krs=test_input($_POST['krs']);
 		if ($krs=='') {
@@ -76,79 +77,50 @@
 			$validDaftar=TRUE;
 		}
 
-		$nama=test_input($_POST['nama']);
-		if ($nama=='') {
-			$errorNama='wajib diisi';
-			$validNama=FALSE;
-		}elseif (!preg_match("/^[a-zA-Z ]*$/",$nama)) {
-			$errorNama='hanya mengizinkan huruf dan spasi';
-			$validNama=FALSE;
-		}else{
-			$validNama=TRUE;
-		}
 
-		$fisik=test_input($_POST['fisik']);
-		if ($fisik=='') {
-			$errorFisik='wajib diisi';
-			$validFisik=FALSE;
-		}else{
-			$validFisik=TRUE;
-		}
-
-		$analitik=test_input($_POST['analitik']);
-		if ($analitik=='') {
-			$errorAnalitik='wajib diisi';
-			$validAnalitik=FALSE;
-		}else{
-			$validAnalitik=TRUE;
-		}
-
-		$organik=test_input($_POST['organik']);
-		if ($organik=='') {
-			$errorOrganik='wajib diisi';
-			$validOrganik=FALSE;
-		}else{
-			$validOrganik=TRUE;
-		}
-
-		$anorganik=test_input($_POST['anorganik']);
-		if ($anorganik=='') {
-			$errorAnorganik='wajib diisi';
-			$validAnorganik=FALSE;
-		}else{
-			$validAnorganik=TRUE;
-		}
-
-		$biokimia=test_input($_POST['biokimia']);
-		if ($biokimia=='') {
-			$errorBiokimia='wajib diisi';
-			$validBiokimia=FALSE;
-		}else{
-			$validBiokimia=TRUE;
+		$smt=$_POST['smt'];
+		$lab=$_POST['lab'];
+		$periode=$_POST['periode'];
+		$smt = test_input($_POST['smt']);
+		if($smt == '' || $smt == "none"){
+			$error_smt= "Laboratorium harus diisi";
+			$valid_smt= FALSE;
+		} else{
+			$valid_smt= TRUE;
 		}
 
 		// jika tidak ada kesalahan input
-		if ($validNim && $validKumulatif && $validSks && $validKrs && $validDaftar && $validFisik && $validAnalitik && $validOrganik && $validAnorganik && $validBiokimia) {
+		if ($valid_smt && $validNim && $validKumulatif && $validSks && $validKrs && $validDaftar ) {
 			$nim=$con->real_escape_string($nim);
-			$nama=$con->real_escape_string($nama);
-			$fisik=$con->real_escape_string($fisik);	
-			$analitik=$con->real_escape_string($analitik);
-			$organik=$con->real_escape_string($organik);
-			$anorganik=$con->real_escape_string($anorganik);
-			$biokimia=$con->real_escape_string($biokimia);
+			$lab=$con->real_escape_string($lab);
+
 			$kumulatif=$con->real_escape_string($kumulatif);
 			$sks=$con->real_escape_string($sks);
 			$krs=$con->real_escape_string($krs);
+			$smt=$con->real_escape_string($smt);
+			$periode=$con->real_escape_string($periode);
 			$daftar=$con->real_escape_string($daftar);
-			$query = "INSERT INTO daftar_tr1 (nim, komulatif, sks, krs, daftar, fisik, analitik, organik, anorganik, biokimia) VALUES ('".$nim."','".$kumulatif."','".$sks."','".$krs."','".$daftar."','".$fisik."','".$analitik."','".$organik."','".$anorganik."','".$biokimia."')";
+
+			$query = "INSERT INTO tr1 (nim, ipk, sks, tanggal_krs, tanggal_daftar,smt,periode_daftar,idlab_tr1) VALUES ('".$nim."','".$kumulatif."','".$sks."','".$krs."','".$daftar."','".$smt."','".$periode."','".$lab."')";
 
 			$hasil=$con->query($query);
-			if (!$hasil) {
+			$que = "SELECT id_tr1 from tr1 WHERE nim=$nim";
+			$hasilq=$con->query($que);
+			$rows = $hasilq->fetch_object();
+			$id = $rows->id_tr1;
+			$query1 = "INSERT INTO nilai_tr1 (id_tr1,id_komponen_tr1) VALUES ('".$id."',1),('".$id."',2),('".$id."',3),('".$id."',4),('".$id."',5),('".$id."',6),('".$id."',7),
+			('".$id."',8),('".$id."',9),('".$id."',10),('".$id."',11),('".$id."',12),($id,13)" ;
+			$hasil1=$con->query($query1);
+			$query2 = "INSERT INTO final_tr1 (id_tr1, id_kategori) VALUES ($id, 1),($id,2)";
+			$hasil2=$con->query($query2);
+			if (!($hasil && $hasil1 && $hasil2)) {
 				die("Tidak dapat menjalankan query database: <br>".$con->error);
 			}else{
 				$sukses=TRUE;
 			}
 			$pesan_sukses="Berhasil menambahkan data.";
+			// echo "string";
+			// echo $nimku;
 		}
 		else{
 			$sukses=FALSE;
@@ -168,6 +140,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Daftar TR 1
+				<!-- <?php echo $id ?> -->
 			</div>
 			<div class="panel-body">
 				<div class="row">
@@ -180,95 +153,57 @@
 								<label>NIM</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorNim)) echo $errorNim;?></span>
 								<input class="form-control" type="text" name="nim" <?php if ($status=='anggota') {echo 'readonly';} ?> maxlength="14" size="30" placeholder="nim 14 digit angka" required autofocus value="<?php if($status=="anggota"){echo $anggota->nim;} ?>">
 							</div>
-							
-						
+
+
 							<div class="form-group">
 								<label>Nilai Komulatif</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorKumulatif)) echo $errorKumulatif;?></span>
 								<input class="form-control" type="text" name="kumulatif" maxlength="50" size="30" placeholder="masukan IPK" required value="<?php if(!$sukses&&$validKumulatif){echo $kumulatif;} ?>">
 							</div>
 
 							<div class="form-group">
-								<label>Nilai SKS</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorSks)) echo $errorSks;?></span>
+								<label>Jumlah SKS</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorSks)) echo $errorSks;?></span>
 								<input class="form-control" type="text" name="sks" maxlength="50" size="30" placeholder="Masukan Nilai SKS" required value="<?php if(!$sukses&&$validSks){echo $sks;} ?>">
 							</div>
 
 							<div class="form-group">
 								<label>Tanggal KRS</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorKrs)) echo $errorKrs;?></span>
-								<input class="form-control" type="text" name="krs" maxlength="50" size="30" placeholder="masukan tanggal KRS" required value="<?php if(!$sukses&&$validKrs){echo $krs;} ?>">
+								<input class="form-control" type="date" name="krs"placeholder="masukan tanggal KRS" required >
+							</div>
+							<div class="form-group" hidden>
+								<label>Tanggal Daftar</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorKrs)) echo $errorKrs;?></span>
+								<input class="form-control" type="text" name="daftar" value="<?php echo date('Y-m-d') ?>" required >
 							</div>
 
 							<div class="form-group">
-								<label>Tanggal Daftar</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorDaftar)) echo $errorDaftar;?></span>
-								<input class="form-control" type="text" name="daftar" maxlength="50" size="30" placeholder="masukan tanggal daftar TR1" required value="<?php if(!$sukses&&$validDaftar){echo $daftar;} ?>">
+								<label>Semester</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_smt)) echo $error_smt;?></span>
+								<input class="form-control" type="text" name="smt" maxlength="14" size="30"  placeholder="numerik" required autofocus>
 							</div>
-
+							<?php
+							$querys = " SELECT flag_lab FROM pkt WHERE nim='".$id."'" ;
+							$results = $con->query( $querys );
+							if (!$results){
+								die ("Could not query the databases: <br />". $con->error);
+							}else{
+								while ($rows = $results->fetch_object()){
+									$lab = $rows->flag_lab;
+								}
+							}
+							 ?>
+							<div class="form-group" hidden>
+								<label>Lab</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_smt)) echo $error_smt;?></span>
+								<input class="form-control" type="text" name="lab" maxlength="14" size="30" required value="<?php echo $lab ?>">
+							</div>
 							<div class="form-group">
-								<label>Prioritas Laboratorium (0-5)</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorDaftar)) echo $errorDaftar;?></span><br>
-								<table>
-									<tr>
-										<td><p>Laboratorium Kimia Fisik</p></td>
-										<td>:</td>
-										<td>
-										<select id="fisik" name="fisik" required>
-											<option value="none">Pilih Prioritas</option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-										</select></td>
-									</tr>
-									<tr>
-										<td><p>Laboratorium Kimia Analitik</p></td>
-										<td>:</td>
-										<td><select id="analitik" name="analitik" required>
-											<option value="none">Pilih Prioritas</option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-										</select></td>
-											</tr>
-									<tr>
-										<td><p>Laboratorium Kimia Organik</p></td>
-										<td>:</td>
-										<td><select id="organik" name="organik" required>
-											<option value="none">Pilih Prioritas</option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-										</select></td>
-									</tr>
-
-									<tr>
-										<td><p>Laboratorium Kimia Anorganik</p></td>
-										<td>:</td>
-										<td><select id="anorganik" name="anorganik" required>
-											<option value="none">Pilih Prioritas</option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-									</select></td>
-									</tr>
-									<tr>
-										<td><p>Laboratorium Kimia Biokimia</p></td>
-										<td>:</td>
-										<td><select id="biokimia" name="biokimia" required>
-											<option value="none">Pilih Prioritas</option>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-										</select></td>
-									</tr>
-								</table>
+								<label>Periode</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_periode)) echo $error_smt;?></span>
+								<select class="form-control" name="periode">
+									<option value="16172">Genap 2016/2017</option>
+									<option value="17181">Ganjil 2017/2018</option>
+									<option value="18192">Genap 2018/2019</option>
+									<option value="19201">Ganjil 2019/2020</option>
+								</select>
 							</div>
+
+
 							<div class="form-group">
 								<input class="form-control" type="submit"  name="submit" value="Daftar">
 							</div>

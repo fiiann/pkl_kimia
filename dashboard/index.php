@@ -1,39 +1,46 @@
-﻿<?php 
-	include_once('sidebar.php'); 
+﻿<?php
+	include_once('sidebar.php');
 	if($status=='petugas'){
 			$pesanWelcome='"Mari berikan layanan yang SIP bagi setiap pengunjung"';
+			$query1="SELECT count(nim) as counter FROM pkt";
 	}elseif($status=='dosen'){
 			$pesanWelcome='Selamat datang Dosen Kimia';
-	}elseif($status=='lab'){
-			$pesanWelcome='Selamat datang Admin Lab';
-	}else{
-			$pesanWelcome='"Banyak baca buku biar makin SIP"';
+			$query1 = "SELECT count(nim) as counter FROM pkt WHERE pkt.dosen_pembimbing='".$dosen->nip."'";
+	}elseif ($status=='lab') {
+			$query1="SELECT count(nim) as counter FROM pkt p WHERE p.flag_lab='".$lab->nama_lab."'";
+	}else {
+		$query1="SELECT count(nim) as counter FROM pkt";
+		$pesanWelcome='"Sukses PKT & TR nya"';
 	}
 
-	$query="SELECT count(nim) as counter FROM daftar_pkt";
-	$result = $con->query($query);
-	$row=$result->fetch_object();
-	$jml_pkt=$row->counter;
 
-	$query="SELECT count(nim) as counter FROM daftar_tr1";
+
+
+	$result1 = $con->query($query1);
+	// $result1 = $con->query($query_pkt_lab);
+	$row=$result1->fetch_object();
+	$jml_pkt=$row->counter;
+	//
+	$query="SELECT count(nim) as counter FROM tr1";
 	$result = $con->query($query);
 	$row=$result->fetch_object();
 	$jml_tr1=$row->counter;
-
-	$query="SELECT count(nim) as counter FROM anggota";
+	//
+	$query="SELECT count(nim) as counter FROM mahasiswa";
 	$result = $con->query($query);
 	$row=$result->fetch_object();
 	$jml_anggota=$row->counter;
-	$query="SELECT count(idtransaksi) as counter FROM detail_transaksi WHERE tgl_kembali='0000-00-00'";
+	// $query="SELECT count(idtransaksi) as counter FROM detail_transaksi WHERE tgl_kembali='0000-00-00'";
 ?>
 <div class="row">
     <div class="col-md-12">
-        <h2>Dashboard</h2>   
-        <h5>Selamat datang <b><?php if($status=="petugas") echo $petugas->nama; elseif($status=="dosen") echo $dosen->nama_dosen;elseif($status=="lab") echo $lab->nama_lab; else echo "$anggota->nama"; ?></b>. <small><i><?php echo $pesanWelcome ?></i></small></h5>
+        <h2>Dashboard</h2>
+
+        <h5>Selamat datang <b><?php if($status=="petugas") echo $petugas->nama; elseif($status=="dosen") echo $dosen->nama_dosen;elseif($status=="lab") echo "Admin ".$lab->nama_lab; else echo $anggota->nama; ?></b>. <small><i><?php echo $pesanWelcome ?></i></small></h5>
     </div>
 </div><hr />
  <div class="row">
-					<div class="col-md-3 col-sm-6 col-xs-6">           
+					<div class="col-md-3 col-sm-6 col-xs-6">
 						<div class="panel panel-back noti-box">
 							<span class="icon-box bg-color-green set-icon">
 								<i class="fa fa-book"></i>
@@ -44,7 +51,7 @@
 							</div>
 						</div>
 					</div>
-                    <div class="col-md-3 col-sm-6 col-xs-6">           
+                    <div class="col-md-3 col-sm-6 col-xs-6">
 						<div class="panel panel-back noti-box">
 							<span class="icon-box bg-color-blue set-icon">
 								<i class="fa fa-book"></i>
@@ -56,7 +63,7 @@
 							</div>
 						 </div>
 					</div>
-                    <div class="col-md-3 col-sm-6 col-xs-6">           
+                    <div class="col-md-3 col-sm-6 col-xs-6">
 						<div class="panel panel-back noti-box">
 							<span class="icon-box bg-color-red set-icon">
 								<?php if($status=='anggota') echo '<i class="fa fa-book"></i>'; else echo '<i class="fa fa-users"></i>'; ?>
@@ -67,7 +74,7 @@
 							</div>
 						 </div>
 					</div>
-                    <div class="col-md-3 col-sm-6 col-xs-6">           
+                    <div class="col-md-3 col-sm-6 col-xs-6">
 						<div class="panel panel-back noti-box">
 							<span class="icon-box bg-color-brown set-icon">
 								<i class="fa fa-money"></i>
@@ -80,7 +87,7 @@
 					</div>
 				</div>
 
-				<hr />                
+				<hr />
                  <!-- /. ROW  -->
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -100,9 +107,9 @@
 									}
 									while($row = $result->fetch_object()){
 										echo "<a href='daftar_buku.php?search=".$row->nama."'><span class='label label-success'>".$row->nama."</span></a> ";
-									}		
+									}
 								?>
 							</div>
 						</div>
                     </div>
-                </div>     
+                </div>

@@ -5,7 +5,7 @@ if($status=="anggota"){
 		header('Location:./index.php');
 	}
 // Assign the query
-$query = " SELECT * FROM anggota WHERE nim='".$nim."'";
+$query = " SELECT * FROM mahasiswa WHERE nim='".$nim."'";
 // Execute the query
 $result = $con->query($query);
 $row = $result->fetch_object();
@@ -33,7 +33,7 @@ $row = $result->fetch_object();
 			echo '</tr>';
 		echo '</table>';
 		echo '<br />';
-		echo 'Apakah anda yakin ingin menghapus data buku ini? <a href="del.php?data=anggota&nim='.$row->nim.'">YA</a> / <a href="daftar_anggota.php">TIDAK</a>';
+		echo 'Apakah anda yakin ingin menghapus data mahasiswa ini? <a href="delete.php?data=mahasiswa&nim='.$row->nim.'">YA</a> / <a href="daftar_mahasiswa.php">TIDAK</a>';
 		$con->close();
 ?>
 <?php

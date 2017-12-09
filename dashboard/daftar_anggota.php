@@ -1,4 +1,4 @@
-<?php		
+<?php
 	include_once('sidebar.php');
 	if($status=="anggota"){
 		header('Location:./index.php');
@@ -17,7 +17,7 @@
 				url:"ajax_func/list_anggota.php?page="+page,
 				type:"GET",
 				dataType:"html",
-				
+
 				beforeSend: function(){
 					$("#hasil_anggota").html('<img src="assets/img/loader.gif" height="20px"/>');
 				},
@@ -39,7 +39,7 @@
 					Page :
 				<select class='form-control' id='page'>
 				<?php
-					$query = "SELECT count(nim) as jml_data FROM anggota";
+					$query = "SELECT count(nim) as jml_data FROM mahasiswa";
 					// Execute the query
 					$result = $con->query( $query );
 					$row = $result->fetch_object();
@@ -74,15 +74,14 @@
 								<th>Kota</th>
 								<!-- <th>Email</th> -->
 								<th>No Telp.</th>
-								<th>Wali</th>
-								<th>Angkatan</th>
+								<!-- <th>Angkatan</th> -->
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody id="hasil_anggota">
 						<?php
 							// Assign a query
-							$query = "SELECT * FROM anggota INNER JOIN dosen ON anggota.id_wali=dosen.id_wali ORDER BY nama LIMIT 10";
+							$query = "SELECT * FROM mahasiswa m ORDER BY nim LIMIT 10";
 							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
@@ -98,15 +97,15 @@
 								echo "<td>".$row->kota."</td>";
 								// echo "<td>".$row->email."</td>";
 								echo "<td>".$row->no_telp."</td>";
-								echo "<td>".$row->nama_dosen."</td>";
-								echo "<td>".$row->angkatan."</td>";
+								// echo "<td>".$row->nama_dosen."</td>";
+								// echo "<td>".$row->angkatan."</td>";
 								echo "<td>
 										<a href='edit_anggota.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
 										<a href='delete_anggota.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;
 										<a href='repass.php?data=anggota&nim=".$row->nim."'><i class='fa fa-lock'></i></a>
 									 </td>";
 								echo "</tr>";
-							}			
+							}
 						?>
 						</tbody>
 					</table>
@@ -115,7 +114,7 @@
 		</div>
 	</div>
 </div>
-<?php 
+<?php
 	mysqli_close($con);
 	include_once('footer.php');
 ?>

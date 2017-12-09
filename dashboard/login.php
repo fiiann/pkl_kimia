@@ -8,10 +8,10 @@
 			$password = md5("sip".$password."pis");
 
 			$cekLoginPetugas = mysqli_query($con, "SELECT idpetugas FROM petugas WHERE email = '$email' AND password = '$password'");
-			$cekLoginAnggota = mysqli_query($con, "SELECT nim FROM anggota WHERE email = '$email' AND password = '$password'");
+			$cekLoginAnggota = mysqli_query($con, "SELECT nim FROM mahasiswa WHERE email = '$email' AND password = '$password'");
 			$cekLoginDosen = mysqli_query($con, "SELECT nip FROM dosen WHERE email = '$email' AND password = '$password'");
-			$cekLoginLab = mysqli_query($con, "SELECT idlab FROM lab WHERE email = '$email' AND password = '$password'");
-			
+			$cekLoginLab = mysqli_query($con, "SELECT idlab FROM lab WHERE admin = '$email' AND password = '$password'");
+
 			if(mysqli_num_rows($cekLoginPetugas)!=0){
 			  $fetch_user_id = mysqli_fetch_assoc($cekLoginPetugas);
 			  $_SESSION['sip_masuk_aja'] = $fetch_user_id['idpetugas'];
@@ -42,7 +42,7 @@
 			}
 		  }
 		}
-    }else{	  
+    }else{
 		header("Location:./");
 		exit;
 	}

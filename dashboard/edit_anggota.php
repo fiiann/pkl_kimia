@@ -1,15 +1,15 @@
 <!--
 	Tanggal		: 25 November 2016
-	Program		: pendaftaran_anggota.php
-	Deskripsi	: menambah data anggota pada database
+	Program		: pendaftaran_mahasiswa.php
+	Deskripsi	: menambah data mahasiswa pada database
 -->
 <?php
 	require_once('sidebar.php');
-	if($status=="anggota"){
+	if($status=="mahasiswa"){
 			header('Location:./index.php');
 		}
-		
-		
+
+
 	$errorNim='';
 	$errorNama='';
 	$errorTlp='';
@@ -26,7 +26,7 @@
 			header('Location:./daftar_anggota.php');
 		}
 		$nim=$_GET['nim'];
-		$query = " SELECT * FROM anggota WHERE nim='".$nim."'";
+		$query = " SELECT * FROM mahasiswa WHERE nim='".$nim."'";
 		// Execute the query
 		$result = $con->query( $query );
 		if (!$result){
@@ -36,13 +36,13 @@
 				$nama=$row->nama;
 				$alamat = $row->alamat;
 				$kota = $row->kota;
-				$email = $row->email;
+				$email_lama = $row->email;
 				$noTlp = $row->no_telp;
 			}
 		}
 	}else{
 		$nimlawas = test_input ($_POST['nim']);
-		
+
 		$nim = test_input($_POST['nim_new']);
 		if ($nim == ''){
 			$errorNim = "nim wajib diisi";
@@ -51,7 +51,7 @@
 			$errorNim = "NIM harus terdiri dari 14 digit angka";
 			$valid_nim = FALSE;
 		}else{
-			$query = " SELECT * FROM anggota WHERE nim='".$nim."'";
+			$query = " SELECT * FROM mahasiswa WHERE nim='".$nim."'";
 			$result = $con->query( $query );
 			if($result->num_rows!=0 && $nim!=$_POST['nim']){
 				$errorNim="nim sudah pernah digunakan, harap masukkan nim lain";
@@ -60,7 +60,7 @@
 			else{
 				$valid_nim = TRUE;
 			}
-		}	
+		}
 		// Cek Nama
 		$nama=test_input($_POST['nama']);
 		if ($nama=='') {
@@ -96,10 +96,12 @@
 		if ($email=='') {
 			$errorEmail='wajib diisi';
 			$validEmail=FALSE;
+		}elseif ($email == $email_lama) {
+			$validEmail = TRUE;
 		}else{
-			$query = " SELECT * FROM anggota WHERE email='".$email."'";
+			$query = " SELECT * FROM mahasiswa WHERE email='".$email."'";
 			$result = $con->query( $query );
-			$query1 = " SELECT email FROM anggota WHERE nim='".$nimlawas."'";
+			$query1 = " SELECT email FROM mahasiswa WHERE nim='".$nimlawas."'";
 			$result1 = $con->query( $query1 );
 			$ceknim = $result1->fetch_object();
 			$email_lawas = $result->email;
@@ -123,7 +125,7 @@
 		}else{
 			$validTlp=TRUE;
 		}
-		
+
 		// jika tidak ada kesalahan input
 		if ($valid_nim && $validNama && $validAlamat && $validKota && $validEmail && $validTlp) {
 			$nim=$con->real_escape_string($nim);
@@ -133,7 +135,7 @@
 			$email=$con->real_escape_string($email);
 			$noTlp=$con->real_escape_string($noTlp);
 
-			$query = "UPDATE anggota SET nim='".$nim."', nama='".$nama."', alamat='".$alamat."', kota='".$kota."', email='".$email."', no_telp='".$noTlp."' WHERE nim='".$nimlawas."'";
+			$query = "UPDATE mahasiswa SET nim='".$nim."', nama='".$nama."', alamat='".$alamat."', kota='".$kota."', email='".$email."', no_telp='".$noTlp."' WHERE nim='".$nimlawas."'";
 
 			$hasil=$con->query($query);
 			if (!$hasil) {
@@ -181,7 +183,7 @@
 							</div>
 							<div class="form-group">
 								<label>Email</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorEmail)) echo $errorEmail;?></span>
-								<input class="form-control" type="email" name="email" size="30" placeholder="example@email.com" required value="<?php if(isset($email)){echo $email;} ?>">
+								<input class="form-control" type="email" name="email" size="30" placeholder="example@email.com" required value="<?php if(isset($email_lama)){echo $email_lama;} ?>">
 							</div>
 							<div class="form-group">
 								<input class="form-control" type="submit" name="edit" value="Update Data">

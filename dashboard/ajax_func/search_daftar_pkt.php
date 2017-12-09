@@ -1,4 +1,4 @@
-<?php 
+<?php
 	require_once('functions.php');
 
 	if(isset($_GET['page'])){
@@ -17,11 +17,11 @@
 	// Assign a query
 	$search=$_GET['search'];
 	if($search==''){
-		$query = "SELECT * FROM daftar_pkt d LEFT JOIN anggota a ON d.nim=a.nim  LIMIT 10 OFFSET $start";		
+		$query = "SELECT * FROM pkt d LEFT JOIN mahasiswa a ON d.nim=a.nim  LIMIT 10 OFFSET $start";
 	}else{
-		$query = "SELECT * FROM daftar_pkt d LEFT JOIN anggota a ON d.nim=a.nim WHERE d.nim like '%$search%' OR nama like '%$search%' LIMIT 10 OFFSET $start";
-	}	
-		
+		$query = "SELECT * FROM pkt d LEFT JOIN mahasiswa a ON d.nim=a.nim WHERE d.nim like '%$search%' OR nama like '%$search%' LIMIT 10 OFFSET $start";
+	}
+
 	// Execute the query
 	$result = $con->query( $query );
 	if(!$result){
@@ -35,13 +35,13 @@
 		echo "<td>".$i."</td>";$i++;
 		echo "<td>".$row->nama."</td>";
 		echo "<td>".$row->nim."</td>";
-		echo "<td>".$row->pilihan1."</td>";
-		echo "<td>".$row->pilihan2."</td>";
-		echo "<td>".$row->pilihan3."</td>";
+		echo "<td>".$row->pilihan_lab1."</td>";
+		echo "<td>".$row->pilihan_lab2."</td>";
+		echo "<td>".$row->pilihan_lab3."</td>";
 		echo "<td align'center'>
 		<a href='edit_daftar_pkt.php?nim=".$row->nim."'><i class='fa fa-edit'></i></a>&nbsp;
 		<a href='delete_pkt.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;
 		</td>
 		</tr>";
-	}			
+	}
 ?>

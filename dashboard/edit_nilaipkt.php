@@ -22,16 +22,16 @@
 			header('Location:./nilai_pkt.php');
 		}
 		$nim=$_GET['nim'];
-		$query = " SELECT * FROM nilai_pkt WHERE nim='".$nim."'";
+		$query = " SELECT * FROM pkt WHERE nim='".$nim."'";
 		// Execute the query
 		$result = $con->query( $query );
 		if (!$result){
 			die ("Could not query the database: <br />". $con->error);
 		}else{
 			while ($row = $result->fetch_object()){
-				// $nim=$row->nim;
-				$nilai_prak = $row->nilai_praktikum;
-				$nilai_lap = $row->nilai_laporan;
+				$nim=$row->nim;
+				$nilai_praktikum = $row->nilai_praktikum;
+				$nilai_laporan = $row->nilai_laporan;
 				$nilai_presentasi = $row->nilai_presentasi;
 			}
 		}
@@ -39,16 +39,16 @@
 		// Cek Nama
 		
 		$nim=test_input($_POST['nim']);
-		$nilai_prak=test_input($_POST['nilai_prak']);
-		if ($nilai_prak=='') {
+		$nilai_praktikum=test_input($_POST['nilai_prak']);
+		if ($nilai_praktikum=='') {
 			$errorNilai_prak='wajib diisi';
 			$validNilai_prak=FALSE;
 		}else{
 			$validNilai_prak=TRUE;
 		}
 
-		$nilai_lap=test_input($_POST['nilai_lap']);
-		if ($nilai_lap=='') {
+		$nilai_laporan=test_input($_POST['nilai_lap']);
+		if ($nilai_laporan=='') {
 			$errorNilai_lap='wajib diisi';
 			$validNilai_lap=FALSE;
 		}else{
@@ -66,11 +66,23 @@
 		// jika tidak ada kesalahan input
 		if ($validNilai_prak && $validNilai_lap && $validNilai_presentasi) {
 			
-			$nilai_prak=$con->real_escape_string($nilai_prak);
-			$nilai_lap=$con->real_escape_string($nilai_lap);
+			$nilai_praktikum=$con->real_escape_string($nilai_praktikum);
+			$nilai_laporan=$con->real_escape_string($nilai_laporan);
 			$nilai_presentasi=$con->real_escape_string($nilai_presentasi);
+			$nilai_total = (60/100*$nilai_praktikum)+(30/100*$nilai_laporan)+(10/100*$nilai_presentasi);
+			if ($nilai_total <= 100 && $nilai_total >= 80) {
+				$huruf = "A";
+			}elseif ($nilai_total < 80 && $nilai_total >= 60) {
+				$huruf = "B";
+			}elseif ($nilai_total < 60 && $nilai_total >= 40) {
+				$huruf = "C";
+			}elseif ($nilai_total < 40) {
+				$huruf = "D";
+			}else {
+				$huruf ="N/A";
+			} 	
 
-			$query = "UPDATE nilai_pkt SET  nilai_praktikum='".$nilai_prak."', nilai_laporan='".$nilai_lap."',nilai_presentasi='".$nilai_presentasi."' WHERE nim='".$nim."'";
+			$query = "UPDATE pkt SET  nilai='".$nilai_total."', nilai_huruf='".$huruf."', nilai_praktikum='".$nilai_praktikum."', nilai_laporan='".$nilai_laporan."',nilai_presentasi='".$nilai_presentasi."' WHERE nim='".$nim."'";
 
 			$hasil=$con->query($query);
 			if (!$hasil) {
@@ -102,12 +114,12 @@
 							</div>
 							<div class="form-group">
 								<label>Nilai Praktikum</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorNilai_prak)) echo $errorNilai_prak;?></span>
-								<input class="form-control" type="text" name="nilai_prak" maxlength="50" size="30" placeholder="edit nilai" required value="<?php if(isset($nilai_prak)){echo $nilai_prak;} ?>">
+								<input class="form-control" type="text" name="nilai_prak" maxlength="50" size="30" placeholder="edit nilai" required value="<?php if(isset($nilai_praktikum)){echo $nilai_praktikum;} ?>">
 							</div>
 							
 							<div class="form-group">
 								<label>Nilai Laporan</label>&nbsp;* <span class="label label-warning"><?php if(isset($errorNilai_lap)) echo $errorNilai_lap;?></span>
-								<input class="form-control" type="text" name="nilai_lap" maxlength="50" size="30" placeholder="edit nilai" required value="<?php if(isset($nilai_lap)){echo $nilai_lap;} ?>">
+								<input class="form-control" type="text" name="nilai_lap" maxlength="50" size="30" placeholder="edit nilai" required value="<?php if(isset($nilai_laporan)){echo $nilai_laporan;} ?>">
 							</div>
 
 							<div class="form-group">

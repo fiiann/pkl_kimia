@@ -1,8 +1,11 @@
 <?php
 	require_once('sidebar.php');
+	require_once('datediff.php');
 	$id=$_SESSION['sip_masuk_aja'];
-	
-	
+	if(($status=="dosen")||($status=="lab")){
+		header('Location:./index.php');
+	}
+
 	$db=new mysqli($db_host, $db_username, $db_password, $db_database);
 
 	if($db->connect_errno){
@@ -10,9 +13,22 @@
 	}
 
 	$sukses=TRUE;
-
+	$query = " SELECT tgl_awal,tgl_akhir FROM petugas WHERE idpetugas=1";
+	// // Execute the query
+	$result = $con->query( $query );
+	if (!$result){
+		die ("Could not query the database: <br />". $con->error);
+	}
+	else{
+		while ($row = $result->fetch_object()){
+			// $nim=$row->nim;
+			$tgl_awal = $row->tgl_awal;
+			$tgl_akhir = $row->tgl_akhir;
+	}
+		}
 	// eksekusi tombol daftar
 	if (isset($_POST['daftar'])) {
+
 		// Cek Nim
 		$nim=test_input($_POST['nim']);
 		if ($nim=='') {
@@ -22,7 +38,7 @@
 			$errorNim='NIM harus terdiri dari 14 digit angka';
 			$validNim=FALSE;
 		}else{
-			$query = " SELECT * FROM daftar_pkt WHERE nim='".$nim."'";
+			$query = " SELECT * FROM pkt WHERE nim='".$nim."'";
 			$result = $con->query( $query );
 			if($result->num_rows!=0){
 				$errorNim="NIM sudah pernah digunakan, harap masukkan NIM lain";
@@ -32,6 +48,16 @@
 				$validNim = TRUE;
 			}
 		}
+
+		$smt=$_POST['smt'];
+		$smt = test_input($_POST['smt']);
+		if($smt == '' || $smt == "none"){
+			$error_smt= "Laboratorium harus diisi";
+			$valid_smt= FALSE;
+		} else{
+			$valid_smt= TRUE;
+		}
+
 		$pilihan1=$_POST['pilihan1'];
 		$pilihan1 = test_input($_POST['pilihan1']);
 		if($pilihan1 == '' || $pilihan1 == "none"){
@@ -59,23 +85,32 @@
 		} else{
 			$valid_pilihan3= TRUE;
 		}
+		$periode=$_POST['periode'];
 
 
 
-		
 
-	
+
 		// jika tidak ada kesalahan input
-		if ($validNim && $valid_pilihan1 && $valid_pilihan2 && $valid_pilihan3) {
+		if ($validNim && $valid_pilihan1 && $valid_pilihan2 && $valid_pilihan3 && $valid_smt) {
 			$nim=$con->real_escape_string($nim);
+			$smt=$con->real_escape_string($smt);
 			$pilihan1=$con->real_escape_string($pilihan1);
 			$pilihan2=$con->real_escape_string($pilihan2);
 			$pilihan3=$con->real_escape_string($pilihan3);
 
-			$query = "INSERT INTO daftar_pkt (nim, pilihan1, pilihan2, pilihan3) VALUES ('".$nim."','".$pilihan1."','".$pilihan2."','".$pilihan3."')";
-
+			$query = "INSERT INTO pkt (nim, pilihan_lab1, pilihan_lab2, pilihan_lab3,smt,periode) VALUES ('".$nim."','".$pilihan1."','".$pilihan2."','".$pilihan3."','".$smt."','".$periode."')";
 			$hasil=$con->query($query);
-			if (!$hasil) {
+
+			$que = "SELECT id_pkt from pkt WHERE nim=$nim";
+			$hasilq=$con->query($que);
+			$rows = $hasilq->fetch_object();
+			$id = $rows->id_pkt;
+
+			$query1 = "INSERT INTO nilai_pkt (id_pkt,id_komponen) VALUES ('".$id."',1),('".$id."',2),('".$id."',3)" ;
+
+			$hasil1=$con->query($query1);
+			if (!($hasil && $hasil1)) {
 				die("Tidak dapat menjalankan query database: <br>".$con->error);
 			}else{
 				$sukses=TRUE;
@@ -87,20 +122,39 @@
 		}
 	}
 ?>
+<?php
+	$awal= "2017-09-01";
+	$todayDate = date("Y-m-d");
+	$deadline="2017-09-07";
+	if (($tgl_awal < $todayDate)&&($todayDate < $tgl_akhir)) {
+		$button='<input class="form-control" type="submit"  name="daftar" value="Daftar">';
+		$keterangan="";
+		// echo $keterangan;
+		// echo '';
 
+	}else {
+		$keterangan = "Diluar batas waktu yang ditentukan";
+		// echo $keterangan;
+	}
+ ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Form Pendaftaran</title>
 </head>
+<!-- $todayDate = date("Y-m-d");// current date -->
 <body>
+
 <div class="row">
 	<div class="col-md-6">
 		<!-- Form Elements -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Daftar PKT
+				<?php echo $keterangan; ?>
+
 			</div>
+
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-md-12">
@@ -110,11 +164,24 @@
 							<!-- NIM -->
 							<div class="form-group">
 								<label>NIM</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorNim)) echo $errorNim;?></span>
-								<input class="form-control" type="text" name="nim" maxlength="14" size="30" <?php if ($status=='anggota') echo 'readonly'; ?> placeholder="nim 14 digit angka" required autofocus value="<? if ($status=="anggota"){ echo $anggota->nim; }  ?>">
+								<input class="form-control" type="text" name="nim" maxlength="14" size="30" <?php if ($status=="anggota") echo "readonly"; ?> placeholder="nim 14 digit angka" required autofocus value="<? if ($status=="anggota"){ echo $anggota->nim; }  ?>">
+							</div>
+
+							<div class="form-group">
+								<label>Semester</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_smt)) echo $error_smt;?></span>
+								<input class="form-control" type="text" name="smt" maxlength="14" size="30"  placeholder="numerik" required autofocus>
+							</div>
+							<div class="form-group">
+								<label>Periode</label>&nbsp;<span class="label label-warning">* <?php if(isset($error_periode)) echo $error_smt;?></span>
+								<select class="form-control" name="periode">
+									<option value="16/17">2016/2017</option>
+									<option value="17/18">2017/2018</option>
+									<option value="18/19">2018/2019</option>
+									<option value="19/20">2019/2020</option>
+								</select>
 							</div>
 							<div class="form-group">
 								<label>Pilih Laboratorium</label>&nbsp;
-								
 							</div>
 							<!-- pilihan1 -->
 							<div class="form-group">
@@ -127,14 +194,14 @@
 								if(!$resultkat){
 									die("Could not connect to the database : <br/>". $db->connect_error);
 								}
-								while ($row = $resultkat->fetch_object()){ 
-									$kid = $row->id_lab; 
-									$kname = $row->nama_lab; 
-									echo '<option value='.$kid.' '; 
+								while ($row = $resultkat->fetch_object()){
+									$kid = $row->idlab;
+									$kname = $row->nama_lab;
+									echo "<option value=".$kid.' ';
 									if(isset($pilihan1) && $pilihan1==$kid)
-									echo 'selected="true"';
-									echo '>'.$kname.'<br/></option>';
-								} 
+									echo "selected='true'";
+									echo ">".$kname."<br/></option>";
+								}
 							?></select>
 						<span class="error">* <?php if(!empty($error_pilihan1)) echo $error_pilihan1; ?></span>
 										</div>
@@ -150,15 +217,15 @@
 								if(!$resultkat){
 									die("Could not connect to the database : <br/>". $db->connect_error);
 								}
-								while ($row = $resultkat->fetch_object()){ 
-									$sid = $row->id_lab; 
-									$sname = $row->nama_lab; 
-									echo '<option value='.$sid.' '; 
+								while ($row = $resultkat->fetch_object()){
+									$sid = $row->idlab;
+									$sname = $row->nama_lab;
+									echo "<option value=".$sid.' ';
 									if(isset($pilihan2) && $pilihan2==$sid)
-									echo 'selected="true"';
-									echo '>'.$sname.'<br/></option>';
+									echo "selected='true'";
+									echo ">".$sname."<br/></option>";
 									echo "cek";
-								} 
+								}
 							?></select>
 						<span class="error">* <?php if(!empty($error_pilihan2)) echo $error_pilihan2; ?></span>
 										</div>
@@ -174,30 +241,32 @@
 								if(!$resultkat){
 									die("Could not connect to the database : <br/>". $db->connect_error);
 								}
-								while ($row = $resultkat->fetch_object()){ 
-									$tid = $row->id_lab; 
-									$tname = $row->nama_lab; 
-									echo '<option value='.$tid.' '; 
+								while ($row = $resultkat->fetch_object()){
+									$tid = $row->idlab;
+									$tname = $row->nama_lab;
+									echo "<option value=".$tid.' ';
 									if(isset($pilihan3) && $pilihan3==$tid)
 									echo 'selected="true"';
-									echo '>'.$tname.'<br/></option>';
+									echo ">".$tname."<br/></option>";
 									echo "cek";
-								} 
+								}
 							?></select>
 			<span class="error">* <?php if(!empty($error_pilihan3)) echo $error_pilihan3; ?></span>
 							</div>
-							
+
 							<div class="form-group">
-								<input class="form-control" type="submit"  name="daftar" value="Daftar">
+
+								 <?php echo $button;  ?>
 							</div>
 						</form>
 					</div>
+
 				</div>
 			</div>
+
 		</div>
 	</div>
 </div>
-
 <?php
 include_once('footer.php');
 $con->close();

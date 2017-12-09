@@ -22,7 +22,7 @@
 			$petugas=$petugas->fetch_object();
 			$status=$_SESSION['sip_status'];
 		}elseif($_SESSION['sip_status']=='anggota'){
-			$query = "SELECT * FROM anggota WHERE nim=".$_SESSION['sip_masuk_aja']."";
+			$query = "SELECT * FROM mahasiswa WHERE nim=".$_SESSION['sip_masuk_aja']."";
 			$anggota=mysqli_query($con,$query); 
 			$anggota=$anggota->fetch_object();
 			$status=$_SESSION['sip_status'];

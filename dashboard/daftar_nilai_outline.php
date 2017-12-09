@@ -1,4 +1,4 @@
-<?php		
+<?php
 	include_once('sidebar.php');
 	// if($status=="anggota"){
 	// 	header('Location:./index.php');
@@ -21,7 +21,7 @@
 				url:"ajax_func/list_anggota.php?page="+page,
 				type:"GET",
 				dataType:"html",
-				
+
 				beforeSend: function(){
 					$("#hasil_anggota").html('<img src="assets/img/loader.gif" height="20px"/>');
 				},
@@ -43,7 +43,7 @@
 					Page :
 				<select class='form-control' id='page'>
 				<?php
-					$query = "SELECT count(nim) as jml_data FROM nilai_outline";
+					$query = "SELECT count(nim) as jml_data FROM outline";
 					// Execute the query
 					$result = $con->query( $query );
 					$row = $result->fetch_object();
@@ -64,7 +64,7 @@
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<?php 
+				<?php
 					if ($status=="petugas") {
 						echo "Daftar Nilai Outline";
 					}else {
@@ -83,7 +83,7 @@
 								<th>Nilai Akhir</th>
 								<?php
 									if (($status=="petugas")|| ($status=="dosen")) {
-										echo "<th>Action</th>";		
+										echo "<th>Action</th>";
 									}
 								?>
 							</tr>
@@ -92,13 +92,15 @@
 						<?php
 							// Assign a query
 							if ($status=="petugas") {
-								$query = "SELECT * FROM nilai_outline INNER JOIN anggota ON nilai_outline.nim=anggota.nim ORDER BY nama LIMIT 10";	
+								$query = "SELECT * FROM outline o INNER JOIN mahasiswa m ON o.nim=m.nim ORDER BY nama LIMIT 10";
 							}elseif ($status=="anggota"){
-								$query = "SELECT * FROM nilai_outline INNER JOIN anggota ON nilai_outline.nim=anggota.nim WHERE nilai_outline.nim='".$anggota->nim."'";
+								$query = "SELECT * FROM outline o INNER JOIN mahasiswa m ON o.nim=m.nim WHERE outline.nim='".$anggota->nim."'";
 							}elseif ($status=="dosen"){
-								$query = "SELECT * FROM nilai_outline INNER JOIN anggota ON nilai_outline.nim=anggota.nim INNER JOIN dosen ON anggota.id_wali=dosen.id_wali WHERE anggota.id_wali='".$dosen->id_wali."'";
+								$query = "SELECT * FROM outline o INNER JOIN mahasiswa m ON o.nim=m.nim INNER JOIN dosen ON m.id_dosen=dosen.nip WHERE m.id_dosen='".$dosen->nip."'";
+							}elseif ($status=="lab"){
+								$query = "SELECT * FROM outline o INNER JOIN mahasiswa m ON o.nim=m.nim INNER JOIN tr1 ON m.nim=tr1.nim INNER JOIN lab ON tr1.idlab=lab.nama_lab WHERE m.id_dosen='".$dosen->nip."'";
 							}
-							
+
 							// Execute the query
 							$result = $con->query( $query );
 							if(!$result){
@@ -118,7 +120,7 @@
 									 </td>";
 								}
 								echo "</tr>";
-							}			
+							}
 						?>
 						</tbody>
 					</table>
@@ -127,7 +129,7 @@
 		</div>
 	</div>
 </div>
-<?php 
+<?php
 	mysqli_close($con);
 	include_once('footer.php');
 ?>

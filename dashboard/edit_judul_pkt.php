@@ -26,7 +26,7 @@
 			header('Location:./daftar_penempatan.php');
 		}
 		$nim=$_GET['nim'];
-		$query = " SELECT * FROM judul WHERE nim='".$nim."'";
+		$query = " SELECT * FROM pkt WHERE nim='".$nim."'";
 		// Execute the query
 		$result = $con->query( $query );
 		if (!$result){
@@ -34,7 +34,7 @@
 		}else{
 			while ($row = $result->fetch_object()){
 				// $nim=$row->nim;
-				$judul = $row->judul_pkt;
+				$judul = $row->judul;
 			}
 		}
 	}else{
@@ -55,7 +55,7 @@
 			
 			$judul=$con->real_escape_string($judul);
 
-			$query = "UPDATE judul SET  judul_pkt='".$judul."' WHERE nim='".$nim."'";
+			$query = "UPDATE pkt SET  judul='".$judul."' WHERE nim='".$nim."'";
 
 			$hasil=$con->query($query);
 			if (!$hasil) {

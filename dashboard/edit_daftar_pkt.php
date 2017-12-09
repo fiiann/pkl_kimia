@@ -6,8 +6,8 @@
 <?php
 	require_once('sidebar.php');
 	$id=$_SESSION['sip_masuk_aja'];
-	
-	
+
+
 	$db=new mysqli($db_host, $db_username, $db_password, $db_database);
 
 	if($db->connect_errno){
@@ -23,10 +23,10 @@
 	// eksekusi tombol edit
 	if (!isset($_POST['edit'])) {
 		if($_GET['nim']==""){
-			header('Location:./daftar_pkt.php');
+			header('Location:./daftar_penempatan.php');
 		}
 		$nim=$_GET['nim'];
-		$query = " SELECT * FROM daftar_pkt WHERE nim='".$nim."'";
+		$query = " SELECT * FROM pkt WHERE nim='".$nim."'";
 		// Execute the query
 		$result = $con->query( $query );
 		if (!$result){
@@ -34,14 +34,14 @@
 		}else{
 			while ($row = $result->fetch_object()){
 				 $nim=$row->nim;
-				$pilihan1 = $row->pilihan1;
-				$pilihan2 = $row->pilihan2;
-				$pilihan3 = $row->pilihan3;
+				$pilihan1 = $row->pilihan_lab1;
+				$pilihan2 = $row->pilihan_lab2;
+				$pilihan3 = $row->pilihan_lab3;
 			}
 		}
 	}else{
 		// Cek Nama
-		
+
 		$nim=test_input($_POST['nim']);
 		//$pilihan1=$_POST['pilihan1'];
 		$pilihan1 = test_input($_POST['pilihan1']);
@@ -70,19 +70,19 @@
 		} else{
 			$valid_pilihan3= TRUE;
 		}
-		
-	
-		
+
+
+
 		// jika tidak ada kesalahan input
 		if ( $valid_pilihan1 && $valid_pilihan2 && $valid_pilihan3) {
-			
+
 			//$nim=$con->real_escape_string($nim);
 			$pilihan1=$con->real_escape_string($pilihan1);
 			$pilihan2=$con->real_escape_string($pilihan2);
 			$pilihan3=$con->real_escape_string($pilihan3);
 
-			
-			$query = "UPDATE daftar_pkt SET pilihan1='".$pilihan1."', pilihan2='".$pilihan2."', pilihan3='".$pilihan3."' WHERE nim='".$nim."'";
+
+			$query = "UPDATE pkt SET pilihan_lab1='".$pilihan1."', pilihan_lab2='".$pilihan2."', pilihan_lab3='".$pilihan3."' WHERE nim='".$nim."'";
 
 			$hasil=$con->query($query);
 			if (!$hasil) {
@@ -99,8 +99,8 @@
 //batas
 
 
-		
-	
+
+
 ?>
 <div class="row">
 	<div class="col-md-6">
@@ -131,15 +131,18 @@
 									if(!$resultkat){
 										die("Could not connect to the database : <br/>". $db->connect_error);
 									}
-									while ($row = $resultkat->fetch_object()){ 
-										$kid = $row->id_lab; 
-										$kname = $row->nama_lab; 
-										echo '<option value='.$kid.' '; 
+									while ($row = $resultkat->fetch_object()){
+										$kid = $row->nama_lab;
+										$kname = $row->nama_lab;
+										echo '<option value='.$kid.' ';
 										if(isset($pilihan1) && $pilihan1==$kid)
 										echo 'selected="true"';
 										echo '>'.$kname.'<br/></option>';
-									} 
+									}
 								?>
+									<!-- <option value="<php $pilihan1;?>">kj</option>"> -->
+
+									</optgroup>
 								</select>
 								<span class="error">* <?php if(!empty($error_pilihan1)) echo $error_pilihan1; ?></span>
 							</div>
@@ -156,14 +159,14 @@
 									if(!$resultkat){
 										die("Could not connect to the database : <br/>". $db->connect_error);
 									}
-									while ($row = $resultkat->fetch_object()){ 
-										$sid = $row->id_lab; 
-										$sname = $row->nama_lab; 
-										echo '<option value='.$sid.' '; 
+									while ($row = $resultkat->fetch_object()){
+										$sid = $row->nama_lab;
+										$sname = $row->nama_lab;
+										echo '<option value='.$sid.' ';
 										if(isset($pilihan2) && $pilihan2==$sid)
 										echo 'selected="true"';
 										echo '>'.$sname.'<br/></option>';
-									} 
+									}
 								?>
 								</select>
 								<span class="error">* <?php if(!empty($error_pilihan2)) echo $error_pilihan2; ?></span>
@@ -179,20 +182,20 @@
 									if(!$resultkat){
 										die("Could not connect to the database : <br/>". $db->connect_error);
 									}
-									while ($row = $resultkat->fetch_object()){ 
-										$tid = $row->id_lab; 
-										$tname = $row->nama_lab; 
-										echo '<option value='.$tid.' '; 
+									while ($row = $resultkat->fetch_object()){
+										$tid = $row->nama_lab;
+										$tname = $row->nama_lab;
+										echo '<option value='.$tid.' ';
 										if(isset($pilihan3) && $pilihan3==$tid)
 										echo 'selected="true"';
 										echo '>'.$tname.'<br/></option>';
-									} 
+									}
 								?>
 								</select>
 								<span class="error">* <?php if(!empty($error_pilihan3)) echo $error_pilihan3; ?></span>
 							</div>
 
-							
+
 							<div class="form-group">
 								<input class="form-control" type="submit"  name="edit" value="Edit">
 							</div>

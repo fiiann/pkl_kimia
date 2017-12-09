@@ -3,7 +3,7 @@
 	if($status=="anggota"){
 		header('Location:./index.php');
 	}
-	
+
 	$sukses=TRUE;
 
 	// eksekusi tombol daftar
@@ -118,16 +118,17 @@
 			$kota=$con->real_escape_string($kota);
 			$email=$con->real_escape_string($email);
 			$noTlp=$con->real_escape_string($noTlp);
-			$id_wali=$con->real_escape_string($id_wali);
+			// $id_wali=$con->real_escape_string($id_wali);
 			$anggota=$con->real_escape_string($anggota);
 
-			$query = "INSERT INTO anggota (nim, nama, password, alamat, kota, email, no_telp, id_wali, angkatan) VALUES ('".$nim."','".$nama."','".$password."','".$alamat."','".$kota."','".$email."','".$noTlp."','".$id_wali."','".$angkatan."')";
+			$query = "INSERT INTO mahasiswa (nim, nama, password, alamat, kota, email, no_telp, angkatan) VALUES ('".$nim."','".$nama."','".$password."','".$alamat."','".$kota."','".$email."','".$noTlp."','".$angkatan."')";
 
 			$hasil=$con->query($query);
 			if (!$hasil) {
 				die("Tidak dapat menjalankan query database: <br>".$con->error);
 			}else{
 				$sukses=TRUE;
+				// redirect('daftar_anggota.php');
 			}
 			$pesan_sukses="Berhasil menambahkan data.";
 		}
@@ -157,7 +158,7 @@
 							<span class="label label-success"><?php if(isset($pesan_sukses)) echo $pesan_sukses;?></span>
 							<div class="form-group">
 								<label>NIM</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorNim)) echo $errorNim;?></span>
-								<input class="form-control" type="text" name="nim" maxlength="14" size="30" placeholder="nim 14 digit angka" required autofocus value="<?php if(!$sukses&&$validNim){echo $nim;} ?>">
+								<input class="form-control" type="number" name="nim" maxlength="14" size="30" placeholder="nim 14 digit angka" required autofocus value="<?php if(!$sukses&&$validNim){echo $nim;} ?>">
 							</div>
 							<div class="form-group">
 								<label>Nama</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorNama)) echo $errorNama;?></span>
@@ -189,7 +190,8 @@
 							</div>
 							<div class="form-group">
 								<label>Password</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorPass)) echo $errorPass;?></span>
-								<input class="form-control" type="password" name="password" minlength="8" pattern="^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$" maxlength="50" size="30" placeholder="minimal 8 digit" required value="<?php if(!$sukses&&$validPass){echo $_POST['password'];} ?>">
+								<input class="form-control" type="password" name="password" minlength="8" maxlength="50" size="30" placeholder="minimal 8 digit" required value="<?php if(!$sukses&&$validPass){echo $_POST['password'];} ?>">
+									<!-- pattern="^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$"  -->
 							</div>
 							<div class="form-group">
 								<input class="form-control" type="submit" name="daftar" value="Daftar">

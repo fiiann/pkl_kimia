@@ -3,8 +3,8 @@
 	require_once('connect.php');
 	require_once('functions.php');
 	// $id=$_SESSION['sip_masuk_aja'];
-	
-	
+
+
 	$db=new mysqli($db_host, $db_username, $db_password, $db_database);
 
 	if($db->connect_errno){
@@ -12,7 +12,7 @@
 	}
 
 	//ambil data
-	$query = "SELECT d.no_pkt,d.nim,a.nama FROM daftar_pkt d INNER JOIN anggota a ON d.nim=a.nim ORDER BY no_pkt";
+	$query = "SELECT d.nim,a.nama,d.nilai_praktikum,d.nilai_laporan,d.nilai_presentasi FROM pkt d LEFT JOIN mahasiswa a ON d.nim=a.nim ORDER BY d.nim";
 	$result=$con->query($query);
 	if(!$result){
 		die('Could not connect to database : <br/>'.$con->error);
@@ -21,7 +21,7 @@
 	while ($row = $result->fetch_object()) {
 		array_push($data, $row);
 	}
-	
+
 	#setting judul dan header tabel
 	$judul = "Daftar Peserta dan Nilai";
 	$judul1 = "Mata Kuliah";
@@ -29,7 +29,7 @@
 	$judul3 = "Tahun Akademik";
 	$judul4 = "Semester";
 	$header = array(
-				 
+
 				 // array('label' => '', 'length' => '9', 'align' =>  'C' ),
 				 array('label' => '', 'length' => '9', 'align' =>  'C' ),
 				 array('label' => '', 'length' => '30', 'align' =>  'C' ),
@@ -66,7 +66,7 @@
 	$pdf->Cell(20,5,$judul4,'',0,'L');
 	$pdf->Cell(10,5,':','',0,'C');$pdf->Cell(35,5,'Genap','',0,'L');
 
-	
+
 	$pdf->Ln();$pdf->Ln();
 
 	$pdf->Cell(9,5,'','T,R,L',0,'C');
@@ -76,7 +76,7 @@
 	  $pdf->Cell(30,7,'NIM','R,L',0,'C');$pdf->Cell(35,7,'Nama Mahasiswa','R,L',0,'C');$pdf->Cell(105,7,'Nilai','B,R,L',0,'C');$pdf->Cell(20,7,'','',1,'C');
 
 	 $pdf->Cell(9,5,'','R,L,B',0,'C');
-	 $pdf->Cell(30,5,'','R,L,B',0,'C');$pdf->Cell(35,5,'','R,L,B',0,'C');$pdf->Cell(21,5,'Praktikum(60%)','R,L,B',0,'C');$pdf->Cell(21,5,'Laporan(30%)','R,L,B',0,'C');$pdf->Cell(21,5,'Presentasi(10%)','R,L,B',0,'C');$pdf->Cell(21,5,'Akhir(100%)','R,L,B',0,'C');$pdf->Cell(21,5,'Huruf','R,L,B',1,'C');
+	 $pdf->Cell(30,5,'','R,L,B',0,'C');$pdf->Cell(35,5,'','R,L,B',0,'C');$pdf->Cell(21,5,'Praktikum','R,L,B',0,'C');$pdf->Cell(21,5,'Laporan','R,L,B',0,'C');$pdf->Cell(21,5,'Presentasi','R,L,B',0,'C');$pdf->Cell(21,5,'Akhir(100%)','R,L,B',0,'C');$pdf->Cell(21,5,'Huruf','R,L,B',1,'C');
 	#buat header tabel
 	 $pdf->SetFont('Times','','10');
 	// $pdf->SetFillColor(0,9,255);
@@ -101,7 +101,7 @@
 		$fill = !$fill;
 		$pdf->Ln();
 	}
-	 
+
 	$pdf->SetFont('Arial','','8');
 	$pdf->Ln();
 	$pdf->Cell(180,1, 'Semarang, 12 Februari 2017', '0', 1, 'R');
@@ -114,7 +114,7 @@
 
 	$pdf->Ln();
 	$pdf->Cell(149.4,5, 'NIP', '0', 1, 'R');
-	
+
 	#output file PDF
 	$pdf->Output();
 ?>

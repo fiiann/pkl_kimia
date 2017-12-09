@@ -4,7 +4,7 @@
 	if($status=="anggota"){
 		header('Location:./index.php');
 	}
-	
+
 	$db=new mysqli($db_host, $db_username, $db_password, $db_database);
 
 	if($db->connect_errno){
@@ -23,17 +23,11 @@
 		}elseif (!preg_match("/^[0-9]{14}$/",$nim)) {
 			$errorNim='NIM harus terdiri dari 14 digit angka';
 			$validNim=FALSE;
-		}else{
-			$query = " SELECT * FROM penempatan WHERE nim='".$nim."'";
-			$result = $con->query( $query );
-			if($result->num_rows!=0){
-				$errorNim="NIM sudah pernah digunakan, harap masukkan NIM lain";
-				$validNim=FALSE;
-			}
+		}
 			else{
 				$validNim = TRUE;
 			}
-		}
+
 		$lab=test_input($_POST['lab']);
 		if($lab=='') {
 			$errorLab='wajib diisi';
@@ -42,20 +36,20 @@
 			$validLab=TRUE;
 		}
 
-		
+
 
 		// jika tidak ada kesalahan input
 		if ($validNim && $validLab ) {
 			$nim=$con->real_escape_string($nim);
 			$lab=$con->real_escape_string($lab);
-			
 
-			$query = "INSERT INTO penempatan (id_lab, nim) VALUES ('".$lab."','".$nim."')";
-			$query2 = "UPDATE anggota SET idlab='".$lab."' WHERE nim='".$nim."'"	;
 
-			$hasil=$con->query($query);
+			// $query = "INSERT INTO penempatan (id_lab, nim) VALUES ('".$lab."','".$nim."')";
+			$query2 = "UPDATE pkt SET flag_lab='".$lab."' WHERE nim='".$nim."'"	;
+
+			// $hasil=$con->query($query);
 			$hasil2=$con->query($query2);
-			if (!($hasil)&&($hasil2)) {
+			if (!$hasil2) {
 				die("Tidak dapat menjalankan query database: <br>".$con->error);
 			}else{
 				$sukses=TRUE;
@@ -104,15 +98,15 @@
 								if(!$resultkat){
 									die("Could not connect to the database : <br/>". $db->connect_error);
 								}
-								while ($row = $resultkat->fetch_object()){ 
-									$sid = $row->idlab; 
-									$sname = $row->nama_lab; 
-									echo '<option value='.$sid.' '; 
+								while ($row = $resultkat->fetch_object()){
+									$sid = $row->nama_lab;
+									$sname = $row->nama_lab;
+									echo '<option value='.$sid.' ';
 									if(isset($lab) && $lab==$sid)
 									echo 'selected="true"';
 									echo '>'.$sname.'<br/></option>';
 									//echo "cek";
-								} 
+								}
 							?></select>
 							<span class="error">* <?php if(!empty($error_Lab)) echo $error_Lab; ?></span>
 							</div>

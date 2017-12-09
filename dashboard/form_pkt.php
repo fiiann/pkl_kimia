@@ -3,8 +3,8 @@
 	require_once('connect.php');
 	require_once('functions.php');
 	// $id=$_SESSION['sip_masuk_aja'];
-	
-	
+
+
 	$db=new mysqli($db_host, $db_username, $db_password, $db_database);
 
 	if($db->connect_errno){
@@ -12,23 +12,37 @@
 	}
 
 	//ambil data
-	$query = "SELECT d.no_pkt,a.nama,d.nim,  d.pilihan1,d.pilihan2,d.pilihan3,d.ttd FROM daftar_pkt d INNER JOIN anggota a ON d.nim=a.nim ORDER BY no_pkt";
+	$query = "SELECT * FROM pkt t INNER JOIN mahasiswa m ON t.nim=m.nim LEFT JOIN lab ON t.pilihan_lab1=lab.idlab LIMIT 10";
+	$query2 = "SELECT * FROM pkt t INNER JOIN mahasiswa m ON t.nim=m.nim LEFT JOIN lab ON t.pilihan_lab2=lab.idlab LIMIT 10";
+	$query3 = "SELECT * FROM pkt t INNER JOIN mahasiswa m ON t.nim=m.nim LEFT JOIN lab ON t.pilihan_lab3=lab.idlab LIMIT 10";
 	$result=$con->query($query);
 	if(!$result){
 		die('Could not connect to database : <br/>'.$con->error);
 	}
 	$data=array();
+	$i=1;
 	while ($row = $result->fetch_object()) {
-		array_push($data, $row);
+		$nama=$row->nama;
+		$nim=$row->nim;
+		$nama_lab=$row->nama_lab;
+		$row2=$result2->fetch_object();
+		$nama_lab2=$row2->nama_lab;
+		$row3=$result3->fetch_object();
+		$nama_lab3=$row3->nama_lab;
+		$hasil = array($i,$nama,$nim,$nama_lab,$nama_lab2,$nama_lab3);
+		$i++;
+		$datas=$hasil->fetch_object();
+
+		array_push($data, $datas);
 	}
-	
+
 	#setting judul dan header tabel
 	$judul = "PENDAFTARAN PRAKTIKUM KIMIA TERPADU";
 	$judul1 = "SEMESTER GENAP TAHUN AKADEMIK 2016/2017";
 	$judul2 = "DEPARTEMEN KIMIA FAKULTAS SAINS DAN MATEMATIKA";
 	$judul3 = "UNIVERSITAS DIPONEGORO SEMARANG";
 	$header = array(
-				 
+
 				 // array('label' => '', 'length' => '9', 'align' =>  'C' ),
 				 array('label' => '', 'length' => '9', 'align' =>  'C' ),
 				 array('label' => '', 'length' => '45', 'align' =>  'C' ),
@@ -84,7 +98,7 @@
 		$fill = !$fill;
 		$pdf->Ln();
 	}
-	 
+
 	#output file PDF
 	$pdf->Output();
 ?>
