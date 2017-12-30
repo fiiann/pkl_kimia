@@ -24,7 +24,7 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Daftar Penempatan TR1
+					Daftar Penempatan TR1 
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive">

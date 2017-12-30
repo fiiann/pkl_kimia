@@ -61,24 +61,20 @@
 			$validNilai_presentasi=TRUE;
 		}
 
+			$total = $nilai_praktikum+$nilai_laporan+$nilai_presentasi;
+			if ($total != 100) {
+				$errorTotal = "Jumlah persentase harus 100%";
+				$validTotal = FALSE;
+			}else {
+				$validTotal = TRUE;
+			}
+
 		// jika tidak ada kesalahan input
-		if ($validNilai_prak && $validNilai_lap && $validNilai_presentasi) {
+		if ($validNilai_prak && $validNilai_lap && $validNilai_presentasi && $validTotal) {
 
 			$nilai_praktikum=$con->real_escape_string($nilai_praktikum);
 			$nilai_laporan=$con->real_escape_string($nilai_laporan);
 			$nilai_presentasi=$con->real_escape_string($nilai_presentasi);
-			$nilai_total = (60/100*$nilai_praktikum)+(30/100*$nilai_laporan)+(10/100*$nilai_presentasi);
-			if ($nilai_total <= 100 && $nilai_total >= 80) {
-				$huruf = "A";
-			}elseif ($nilai_total < 80 && $nilai_total >= 60) {
-				$huruf = "B";
-			}elseif ($nilai_total < 60 && $nilai_total >= 40) {
-				$huruf = "C";
-			}elseif ($nilai_total < 40) {
-				$huruf = "D";
-			}else {
-				$huruf ="N/A";
-			}
 
 			$query = "UPDATE pkt SET  nilai='".$nilai_total."', nilai_huruf='".$huruf."', nilai_praktikum='".$nilai_praktikum."', nilai_laporan='".$nilai_laporan."',nilai_presentasi='".$nilai_presentasi."' WHERE nim='".$nim."'";
 
@@ -87,7 +83,7 @@
 				die("Tidak dapat menjalankan query database: <br>".$con->error);
 			}else{
 				$sukses=TRUE;
-				echo "<br/>Berhasil edit data";
+				$pesan_sukses = "Berhasil";
 			}
 		}
 		else{
@@ -106,6 +102,8 @@
 				<div class="row">
 					<div class="col-md-12">
 						<form method="POST" role="form" autocomplete="on" action="">
+							<span class="label label-success"><?php if(isset($pesan_sukses)) echo $pesan_sukses;?></span>
+							<span class="label label-warning"><?php if(isset($errorTotal)) echo $errorTotal;?></span>
 							<div class="form-group" hidden>
 								<label>NIM</label>
 								<input class="form-control" type="text" name="nim" maxlength="14" size="30" value="<?php echo $nim; ?>">

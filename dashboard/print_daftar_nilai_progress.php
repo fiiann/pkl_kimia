@@ -1,6 +1,9 @@
 <?php
 	include_once('functions.php');
 	$id=$_SESSION['sip_masuk_aja'];
+    if($status!="petugas"){
+      header('Location:./index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -56,7 +59,7 @@
     						<?php
     							// Assign a query
     							if ($status=="petugas") {
-    								$query = "SELECT * FROM tr1 p INNER JOIN mahasiswa m ON p.nim=m.nim ORDER BY nama LIMIT 10 ";
+    								$query = "SELECT * FROM tr1 p INNER JOIN mahasiswa m ON p.nim=m.nim WHERE p.nilai_progress IS NOT NULL ORDER BY nama ";
      							}elseif ($status=="dosen"){
     								$query = "SELECT * FROM tr1 p INNER JOIN mahasiswa m ON p.nim=m.nim  WHERE p.dosen_pembimbing='".$dosen->nip."' AND p.nilai_huruf IS NOT NULL";
     							}elseif ($status=="lab"){

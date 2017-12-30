@@ -1,6 +1,9 @@
 <?php
 	include_once('functions.php');
 	$id=$_SESSION['sip_masuk_aja'];
+    if($status!="petugas"){
+      header('Location:./index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,7 +39,9 @@
     								<th>No</th>
     								<th>NIM</th>
     								<th>Nama</th>
-    								<th>Nilai</th>
+                                    <th>Nilai Outline</th>
+                                    <th>Nilai Progress</th>
+    								<th>Nilai TR 1</th>
     								<!-- <?php if ($status=="petugas"||$status=="dosen") {
     									echo "<th rowspan='2'>Action</th>";
     								} ?> -->
@@ -47,7 +52,7 @@
     						<?php
     							// Assign a query
     							if ($status=="petugas") {
-    								$query = "SELECT * FROM pkt p INNER JOIN mahasiswa m ON p.nim=m.nim WHERE p.nilai_huruf IS NOT NULL ORDER BY nama LIMIT 10 ";
+    								$query = "SELECT * FROM tr1 p INNER JOIN mahasiswa m ON p.nim=m.nim WHERE p.nilai_huruf IS NOT NULL ORDER BY nama  ";
 
     							}elseif ($status=="dosen"){
     								$query = "SELECT * FROM pkt p INNER JOIN mahasiswa m ON p.nim=m.nim  WHERE p.dosen_pembimbing='".$dosen->nip."' AND p.nilai_huruf IS NOT NULL";
@@ -72,7 +77,9 @@
     								echo "<td>".$i."</td>";$i++;
     								echo "<td>".$row->nim."</td>";
     								echo "<td>".$row->nama."</td>";
-    								echo "<td align='center'>".$row->nilai_praktikum."</td>";
+                                    echo "<td align='center'>".$row->nilai_outline."</td>";
+                                    echo "<td align='center'>".$row->nilai_progress."</td>";
+    								echo "<td align='center'>".$row->nilai_tr1."</td>";
     								// if ($status=="petugas"||$status=="dosen"){
     								// 	echo "<td align='center'>
     								// 			<a href='input_nilai_pkt1.php?id=".$row->id_pkt."'><i class='fa fa-edit'></i></a>&nbsp;</td>";

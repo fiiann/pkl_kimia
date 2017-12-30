@@ -10,11 +10,13 @@
 <head>
   <title>Daftar Nilai PKT</title>
 </head>
+<?php if ($status!='anggota'): ?>
 <script type="text/javascript">
   $(document).ready(function(){
     $('#tabelku').DataTable();
 });
 </script>
+<?php endif ?>
 <style>
 .buttonku {
     background-color: #4CAF50;
@@ -61,6 +63,7 @@
       });
  </script>
 <body>
+  <?php if ($status!='anggota'): ?>
 	<div class="row" >
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="panel panel-default">
@@ -81,11 +84,16 @@
 			</div>
 		</div>
 	</div>
+  <?php endif ?>
 	<div class="row" >
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="panel panel-default">
-				<div class="panel-heading">
-					 Daftar Nilai PKT
+				<div class="panel-heading">Daftar Nilai PKT 
+          <?php if ($status=='petugas'): ?>
+            
+					 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <a  name="links" href="print_daftar_nilai.php"><button name="links" id="links" class="btn btn-info">Print</button></a>
+          <?php endif ?>
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive" id="search">

@@ -5,9 +5,7 @@
 -->
 <?php
 	require_once('sidebar.php');
-	if(($status=="anggota")||($status=="dosen")){
-		header('Location:./index.php');
-	}
+	
 
 	$db=new mysqli($db_host, $db_username, $db_password, $db_database);
 
@@ -15,6 +13,9 @@
 		die("Could not connect to the database : <br/>". $db->connect_error);
 	}
 
+	if($status!='petugas'){
+		header('Location:./index.php');
+	}
 	$errorLab='';
 
 

@@ -25,9 +25,9 @@ if(isset($_GET['data'])){
 			echo 'Tidak ada data password yang di reset.';
 		}else{
 			$nim = $_GET['nim'];
-			$query = "UPDATE anggota SET password='$password' WHERE nim='".$nim."'";
+			$query = "UPDATE mahasiswa SET password='$password' WHERE nim='".$nim."'";
 			$result = $con->query( $query );
-			$query1 = "SELECT * FROM anggota WHERE nim='".$nim."'";
+			$query1 = "SELECT * FROM mahasiswa WHERE nim='".$nim."'";
 			$result1 = $con->query( $query1 );
 			$result1 = $result1->fetch_object();
 			echo '<b>Selamat!</b><br/>Password berhasil di reset.<br/><br/>';

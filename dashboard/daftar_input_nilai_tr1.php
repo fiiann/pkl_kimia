@@ -97,12 +97,12 @@
 						      }elseif ($status=="dosen") {
 
 						        if($row->nilai_outline == null){
-						          echo "<td align='center'><a href='input_nilai_tr1.php?id=".$row->id_tr1."' class='btn btn-info btn-s' role='button'>Nilai</a></td>";
+						          echo "<td align='center'><a href='input_nilai_outline.php?id=".$row->id_tr1."' class='btn btn-info btn-s' role='button'>Nilai</a></td>";
 						        }else {
 						          echo "<td>".$row->nilai_outline."</td>";
 						        }
 						        if($row->nilai_progress == null){
-						          echo "<td align='center'><a href='input_nilai_tr1.php?id=".$row->id_tr1."' class='btn btn-info btn-s' role='button'>Nilai</a></td>";
+						          echo "<td align='center'><a href='input_nilai_progress.php?id=".$row->id_tr1."' class='btn btn-info btn-s' role='button'>Nilai</a></td>";
 						        }else {
 						          echo "<td>".$row->nilai_progress."</td>";
 						        }

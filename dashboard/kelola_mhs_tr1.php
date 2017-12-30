@@ -8,17 +8,19 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/datatables.min.css">
 	<script src="assets/js/datatables.js" type="text/javascript"></script>
 </head>
-<script type="text/javascript">
-	$(document).ready(function(){
-    $('#tabelku').DataTable();
-});
-</script>
 <?php
 	include_once('sidebar.php');
 	$id=$_SESSION['sip_masuk_aja'];
 	// require_once('db_login.php');
 		$db=new mysqli($db_host, $db_username, $db_password, $db_database);
 ?>
+<?php if ($status!='anggota'): ?>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#tabelku').DataTable();
+});
+</script>
+<?php endif ?>
 <body>
 	<div class="row" >
 		<div class="col-md-12 col-sm-12 col-xs-12">
@@ -77,7 +79,7 @@
 						    }
 						    $i=1;
 						    while($row = $result->fetch_object()){
-						      echo "<tr align='center'>";
+						      echo "<tr align='leftz'>";
 						      echo "<td>".$i."</td>";$i++;
 						      echo "<td>".$row->nama."</td>";
 						      echo "<td>".$row->nim."</td>";

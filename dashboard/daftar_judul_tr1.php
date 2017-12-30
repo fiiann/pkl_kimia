@@ -23,8 +23,11 @@
 	<div class="row" >
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="panel panel-default">
-				<div class="panel-heading">
-					Daftar Judul TR1
+				<div class="panel-heading">Daftar Judul TR1 
+					<?php if ($status=='petugas'): ?>
+					&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <a  name="links" href="print_daftar_judul_tr1.php"><button name="links" id="links" class="btn btn-info">Print</button></a>
+					<?php endif ?>
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive">
@@ -59,7 +62,7 @@
 						      $query = "SELECT * FROM tr1 INNER JOIN mahasiswa ON tr1.nim=mahasiswa.nim LEFT JOIN dosen ON tr1.nip1=dosen.nip WHERE mahasiswa.nim='".$anggota->nim."'  ";
 						    }
 
-						    echo $lab->idlab;
+						    // echo $lab->idlab;
 						    // Execute the query
 						    $result = $con->query( $query );
 						    if(!$result){

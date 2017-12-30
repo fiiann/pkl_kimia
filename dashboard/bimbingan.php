@@ -22,7 +22,7 @@
 
 	// eksekusi tombol edit
 	if(!isset($_POST['edit'])){
-		$query = " SELECT * FROM pkt INNER JOIN lab ON pkt.pilihan_lab1=lab.idlab left join mahasiswa on pkt.nim=mahasiswa.nim WHERE id_pkt='".$id_pkt."'" ;
+		$query = " SELECT * FROM pkt INNER JOIN lab ON pkt.flag_lab=lab.idlab left join mahasiswa on pkt.nim=mahasiswa.nim WHERE id_pkt='".$id_pkt."'" ;
 		// Execute the query
 		$result = $con->query( $query );
 		if (!$result){
@@ -31,7 +31,7 @@
 			while ($row = $result->fetch_object()){
 				// $nim=$row->nim;
 				$nama=$row->nama;
-				$nip=$row->nip;
+				$nip=$row->dosen_pembimbing;
 				$lab = $row->flag_lab;
 				$nama_lab = $row->nama_lab;
 			}
@@ -81,7 +81,7 @@
 		<!-- Form Elements -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				Bimbingan <?php echo $pilihan1; ?>
+				Bimbingan <?php echo $nama_lab; ?>
 			</div>
 			<div class="panel-body">
 				<div class="row">

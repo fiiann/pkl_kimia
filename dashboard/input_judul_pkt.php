@@ -77,7 +77,7 @@
 		<!-- Form Elements -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				Masukan Judul PKT
+				Masukan Judul PKT <!-- <?php echo $judul; ?> -->
  			</div>
 			<div class="panel-body">
 				<div class="row">
@@ -90,10 +90,10 @@
 							</div>
 							<div class="form-group">
 								<label>Judul</label>&nbsp;<span class="label label-warning">* <?php if(isset($errorJudul)) echo $errorJudul;?></span>
-								<textarea class="form-control" name="judul" rows="5" cols="150" maxlength="1000" size="130" placeholder="Judul PKT" required autofocus value="<?php if(isset($judul)){echo $judul;} ?>">
+<!-- 								<textarea class="form-control" name="judul" rows="5" cols="150" placeholder="Judul PKT" required  value="<?php if(isset($judul)){echo $judul;} ?>">
 
-								</textarea>
-								<!-- <input class="form-control" type="text" name="judul" <?php if(isset($judul)){echo "readonly";} ?>maxlength="200" size="200" placeholder="Masukan Judul PKT" required autofocus value="<?php if(isset($judul)){echo $judul;} ?>"> -->
+								</textarea> -->
+								<input class="form-control" type="text" name="judul" <?php if(isset($judul)){echo "readonly";} ?>maxlength="200" size="200" placeholder="Masukan Judul PKT" required autofocus value="<?php if(isset($judul)){echo $judul;} ?>">
 								<!-- <input class="form-control" type="text-area" name="judul" maxlength="50" size="30" placeholder="Judul PKT" required autofocus value="<?php if(!$sukses&&$validJudul){echo $judul;} ?>"> -->
 							</div>
 

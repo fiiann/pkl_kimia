@@ -1,12 +1,15 @@
 <?php
 	include_once('functions.php');
 	$id=$_SESSION['sip_masuk_aja'];
+    if($status!="petugas"){
+      header('Location:./index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Cetak Judul PKT</title>
+    <title>Cetak Nilai PKT</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- <title><?php $site_name ?></title> -->
@@ -25,7 +28,7 @@
     	<div class="col-md-12 col-sm-12 col-xs-12">
     		<div class="panel panel-default">
     			<div class="panel-heading">
-						Daftar Pendaftaran PKT <br>
+						Daftar Nilai PKT <br>
 					 Departemen Kimia Universitas Diponegoro <br>
     			</div>
     			<div class="panel-body">

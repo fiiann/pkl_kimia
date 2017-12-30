@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Daftar Topik PKT</title>
+	<title>Daftar Judul PKT</title>
 	<script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
 	<!-- <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
 	<script type="text/javascript" src="http://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script> -->
@@ -24,7 +24,11 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					 Daftar Topik PKT
+					 Daftar Judul PKT 
+					<?php if ($status=='petugas'): ?>
+						&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <a  name="links" href="print_daftar_judul.php"><button name="links" id="links" class="btn btn-info">Print</button></a>
+					<?php endif ?>
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive">
@@ -35,7 +39,7 @@
 						      <th>NIM</th>
 						      <th>Nama</th>
 						      <th>Pembimbing</th>
-						      <th>Topik</th>
+						      <th>Judul</th>
 						      <?php
 						      if (!(($status=="anggota")||($status=="lab"))) {
 						        echo "<th>Action</th>";
@@ -50,7 +54,7 @@
 						  <?php
 						    // Assign a query
 						    if($status=="petugas"){
-						      $query = "SELECT * FROM pkt INNER JOIN mahasiswa ON pkt.nim=mahasiswa.nim LEFT JOIN dosen ON pkt.dosen_pembimbing=dosen.nip WHERE pkt.judul IS NOT NULL ORDER BY pkt.flag_lab   ";
+						      $query = "SELECT * FROM pkt INNER JOIN mahasiswa ON pkt.nim=mahasiswa.nim LEFT JOIN dosen ON pkt.dosen_pembimbing=dosen.nip WHERE pkt.judul IS NOT NULL ORDER BY pkt.nim   ";
 						    }elseif ($status=="dosen") {
 						      $query = "SELECT * FROM pkt INNER JOIN mahasiswa ON pkt.nim=mahasiswa.nim LEFT JOIN dosen ON pkt.dosen_pembimbing=dosen.nip WHERE pkt.dosen_pembimbing='".$dosen->nip."' and pkt.judul is not null order by pkt.nim  ";
 						    }elseif ($status=="lab"){

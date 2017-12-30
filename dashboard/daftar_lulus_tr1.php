@@ -38,7 +38,7 @@
 						      <th>Pembimbing</th>
 						      <th>Nilai</th>
 						      <!-- <th>Semester</th> -->
-						      <th>Periode</th>
+						      <!-- <th>Periode</th> -->
 						      <!-- <?php
 						        // if ($status=="petugas") {
 						        // 	echo "<th>Action</th>";
@@ -75,7 +75,7 @@
 						      echo "<td>".$row->nama_dosen."</td>";
 						      echo "<td>".$row->nilai_huruf."</td>";
 						      // echo "<td>".$row->smt."</td>";
-						      echo "<td>".$row->periode."</td>";
+						      // echo "<td>".$row->periode."</td>";
 						      // echo "<td>".$row->periode_lulus."</td>";
 						      // if ($status=="petugas") {
 						      // echo "<td align='center'>

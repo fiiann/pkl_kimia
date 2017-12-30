@@ -1,7 +1,7 @@
 ﻿<?php
 	include_once('sidebar.php');
 	if($status=='petugas'){
-			$pesanWelcome='"Mari berikan layanan yang SIP bagi setiap pengunjung"';
+			$pesanWelcome='""';
 			$query1="SELECT count(nim) as counter FROM pkt";
 	}elseif($status=='dosen'){
 			$pesanWelcome='Selamat datang Dosen Kimia';
@@ -80,10 +80,10 @@
 
 				<hr />
                  <!-- /. ROW  -->
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
-						<div class="panel panel-default">
-							<div class="panel-heading">
+						<div class="panel panel-default"> -->
+							<!-- <div class="panel-heading">
 							   Kategori Topik
 							</div>
 							<div class="panel-body">
@@ -100,7 +100,7 @@
 										echo "<a href='daftar_buku.php?search=".$row->nama."'><span class='label label-success'>".$row->nama."</span></a> ";
 									}
 								?>
-							</div>
+							</div> -->
 						</div>
                     </div>
                 </div>

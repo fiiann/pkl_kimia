@@ -34,8 +34,13 @@
       <div class="panel panel-default">
         <div class="panel-heading">
            Penempatan Laboratorium <?php if ($status=='lab'):echo $lab->nama_lab; ?>
-
+            
            <?php endif; ?>
+           <?php if ($status=='petugas'): ?>
+           &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <a  name="links" href="print_daftar_penempatan.php"><button name="links" id="links" class="btn btn-info">Print</button></a>
+             
+           <?php endif ?>
         </div>
         <div class="panel-body">
           <div class="table-responsive">

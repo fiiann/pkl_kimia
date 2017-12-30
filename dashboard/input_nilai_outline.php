@@ -388,7 +388,7 @@
 
 							<div class="form-group">
 								<label>Rumusan Masalah</label>&nbsp;<span class="label label-warning">* <?php if(isset($errornilai_rumusan)) echo $errornilai_rumusan;?></span>
-								<input class="form-control" type="number" name="nilai_rumusan" min="0" max="100" required value="<?php if(isset($nilai_rumusan)){echo $nilai_rumusan;} if(!$sukses&&$validnilai_rumusan){echo $nilai_rumusan;} ?>">
+								<input class="form-control" type="number" name="nilai_rumusan" min="0" max="100" placeholder="0-100" required value="<?php if(isset($nilai_rumusan)){echo $nilai_rumusan;} if(!$sukses&&$validnilai_rumusan){echo $nilai_rumusan;} ?>">
 							</div>
 
 							<div class="form-group">

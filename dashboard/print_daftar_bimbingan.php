@@ -1,12 +1,15 @@
 <?php
 	include_once('functions.php');
 	$id=$_SESSION['sip_masuk_aja'];
+    if($status!="petugas"){
+      header('Location:./index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Cetak Daftar PKT</title>
+    <title>Cetak Daftar Bimbingan PKT</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?php $site_name ?></title>

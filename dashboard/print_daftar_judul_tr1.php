@@ -1,6 +1,9 @@
 <?php
 	include_once('functions.php');
 	$id=$_SESSION['sip_masuk_aja'];
+    if($status!="petugas"){
+      header('Location:./index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -67,7 +70,7 @@
     							}
     							$i=1;
     							while($row = $result->fetch_object()){
-    								echo "<tr align='center'>";
+    								echo "<tr align='left'>";
     								echo "<td>".$i."</td>";$i++;
     								echo "<td>".$row->nim."</td>";
     								echo "<td>".$row->nama."</td>";

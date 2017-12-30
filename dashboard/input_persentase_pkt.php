@@ -86,8 +86,16 @@
 			$validNilai_presentasi=TRUE;
 		}
 
+		$total = $nilai_praktikum+$nilai_laporan+$nilai_presentasi;
+		if ($total != 100) {
+			$errorTotal = "Jumlah persentase harus 100%";
+			$validTotal = FALSE;
+		}else {
+			$validTotal = TRUE;
+		}
+
 		// jika tidak ada kesalahan input
-		if ($validNilai_prak && $validNilai_lap && $validNilai_presentasi) {
+		if ($validNilai_prak && $validNilai_lap && $validNilai_presentasi && $validTotal) {
 
 			$nilai_praktikum=$con->real_escape_string($nilai_praktikum);
 			$nilai_laporan=$con->real_escape_string($nilai_laporan);
@@ -129,23 +137,24 @@
 					<div class="col-md-12">
 						<form method="POST" role="form" autocomplete="on" action="">
 							<span class="label label-success"><?php if(isset($pesan_sukses)) echo $pesan_sukses;?></span>
+							<span class="label label-warning"><?php if(isset($errorTotal)) echo $errorTotal;?></span>
 							<div class="form-group" hidden>
 								<label>NIM</label>
 								<input class="form-control"  type="text" name="nim" maxlength="14" size="30" value="<?php echo $nim; ?>">
 							</div>
 							<div class="form-group">
 								<label>Nilai Praktikum</label>&nbsp  <span class="label label-warning">*<?php if(isset($errorNilai_prak)) echo $errorNilai_prak;?></span>
-								<input class="form-control"  type="number" name="nilai_prak" min="0" max="100" placeholder="edit nilai" required value="<?php if(isset($persentase_praktikum)){echo $persentase_praktikum;} ?>">
+								<input class="form-control"  type="number" name="nilai_prak" min="0" max="100" placeholder="0-100" required value="<?php if(isset($persentase_praktikum)){echo $persentase_praktikum;} ?>">
 							</div>
 
 							<div class="form-group">
 								<label>Nilai Laporan</label>&nbsp  <span class="label label-warning">*<?php if(isset($errorNilai_lap)) echo $errorNilai_lap;?></span>
-								<input class="form-control"  type="number" name="nilai_lap" min="0" max="100" placeholder="edit nilai" required value="<?php if(isset($persentase_laporan)){echo $persentase_laporan;} ?>">
+								<input class="form-control"  type="number" name="nilai_lap" min="0" max="100" placeholder="0-100" required value="<?php if(isset($persentase_laporan)){echo $persentase_laporan;} ?>">
 							</div>
 
 							<div class="form-group">
 								<label>Nilai Presentasi</label>&nbsp <span class="label label-warning">*<?php if(isset($errorNilai_presentasi)) echo $errorNilai_presentasi;?></span>
-								<input class="form-control"  type="number" name="nilai_presentasi" min="0" max="100" placeholder="edit nilai" required value="<?php if(isset($persentase_presentasi)){echo $persentase_presentasi;} ?>">
+								<input class="form-control"  type="number" name="nilai_presentasi" min="0" max="100" placeholder="0-100" required value="<?php if(isset($persentase_presentasi)){echo $persentase_presentasi;} ?>">
 							</div>
 
 
@@ -157,7 +166,7 @@
 				</div>
 			</div>
 		</div>
-		<a href="nilai_pkt.php"><button class="btn btn-info">Kembali ke Nilai PKT</button></a>
+		<!-- <a href="nilai_pkt.php"><button class="btn btn-info">Kembali ke Nilai PKT</button></a> -->
 	</div>
 </div>
 

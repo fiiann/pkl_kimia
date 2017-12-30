@@ -13,6 +13,13 @@
     $('#tabelku').DataTable();
 });
 </script>
+<style type="text/css">
+	a.links {
+		padding-right: 1em;
+	}
+
+</style>
+
 <?php
 	include_once('sidebar.php');
 	$id=$_SESSION['sip_masuk_aja'];
@@ -24,12 +31,19 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					 Penempatan Laboratorium <?php if ($status=='lab'):echo $lab->nama_lab; ?>
-					 <?php endif; ?>
+					 Pilihan Laboratorium Mahasiswa 
+					 <?php if ($status =='petugas'): ?>
+					 	
+					 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+								<a  name="links" href="print_daftar_pkt.php"><button name="links" id="links" class="btn btn-info">Print</button></a>
+					 <?php endif ?>
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive">
-						<table class="table table-striped table-bordered table-hover" id="tabelku">
+						<?php if ($status!='anggota'): echo '<table class="table table-striped table-bordered table-hover" id="tabelku">'; ?>
+							<?php else: echo '<table class="table table-striped table-bordered table-hover">';?>
+						<?php endif ?>
+						
 							<thead align="center">
 								<tr align="center">
 									<th rowspan="2">No</th>
@@ -43,7 +57,7 @@
 									<th rowspan="2">Nilai</th> -->
 									<?php if (($status=='petugas')||($status=='lab')): ?>
 
-										<th rowspan="2">Tempatkan</th>
+										<th rowspan="2">Edit</th>
 										<th rowspan="2">Hapus</th>
 									<?php endif; ?>
 								</tr>
@@ -59,16 +73,16 @@
 							<?php
 
 								if (($status=="petugas")||($status=="lab")||($status=='dosen')) {
-									$query = "SELECT * FROM pkt t INNER JOIN mahasiswa m ON t.nim=m.nim LEFT JOIN lab ON t.pilihan_lab1=lab.idlab LIMIT 10";
-									$query2 = "SELECT * FROM pkt t INNER JOIN mahasiswa m ON t.nim=m.nim LEFT JOIN lab ON t.pilihan_lab2=lab.idlab LIMIT 10";
-									$query3 = "SELECT * FROM pkt t INNER JOIN mahasiswa m ON t.nim=m.nim LEFT JOIN lab ON t.pilihan_lab3=lab.idlab LIMIT 10";
+									$query = "SELECT * FROM pkt t INNER JOIN mahasiswa m ON t.nim=m.nim LEFT JOIN lab ON t.pilihan_lab1=lab.idlab ";
+									$query2 = "SELECT * FROM pkt t INNER JOIN mahasiswa m ON t.nim=m.nim LEFT JOIN lab ON t.pilihan_lab2=lab.idlab ";
+									$query3 = "SELECT * FROM pkt t INNER JOIN mahasiswa m ON t.nim=m.nim LEFT JOIN lab ON t.pilihan_lab3=lab.idlab ";
 								}elseif ($status=="anggota"){
 									$query = " SELECT * FROM pkt p INNER JOIN mahasiswa m ON p.nim=m.nim LEFT JOIN lab d ON p.pilihan_lab1=d.idlab WHERE m.nim='".$anggota->nim."'";
 									$query2 = " SELECT * FROM pkt p INNER JOIN mahasiswa m ON p.nim=m.nim LEFT JOIN lab d ON p.pilihan_lab2=d.idlab WHERE m.nim='".$anggota->nim."'";
 									$query3 = " SELECT * FROM pkt p INNER JOIN mahasiswa m ON p.nim=m.nim LEFT JOIN lab d ON p.pilihan_lab3=d.idlab WHERE m.nim='".$anggota->nim."'";
 								}
 								// elseif ($status=="dosen"){
-								// 	$query = "SELECT * FROM pkt p INNER JOIN mahasiswa m ON p.nim=m.nim LEFT JOIN dosen d ON p.dosen_pembimbing=d.nip ORDER BY nama LIMIT 10";
+								// 	$query = "SELECT * FROM pkt p INNER JOIN mahasiswa m ON p.nim=m.nim LEFT JOIN dosen d ON p.dosen_pembimbing=d.nip ORDER BY nama ";
 								// }
 								//$query = " SELECT * FROM pkt p INNER JOIN mahasiswa m ON p.nim=m.nim INNER JOIN dosen d ON m.id_dosen=d.nip WHERE m.id_dosen='".$dosen->nip."'"; //diganti
 								$result = $con->query( $query );
@@ -93,7 +107,7 @@
 									echo "<td align='center'>".$row3->nama_lab."</td>";
 									if (($status=="petugas")||($status=="lab")){
 										echo "<td align='center'>
-											<a href='edit_lab.php?id=".$row->id_pkt."'><i class='fa fa-edit'></i></a>&nbsp;
+											<a href='edit_daftar_pkt.php?id=".$row->id_pkt."'><i class='fa fa-edit'></i></a>&nbsp;
 										 </td>";
 										 echo "<td align='center'>
 	 										<a href='delete_pkt.php?nim=".$row->nim."'><i class='fa fa-trash-o'></i></a>&nbsp;

@@ -31,7 +31,8 @@ h<!DOCTYPE html>
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Daftar Nilai Outline
+					Daftar Nilai Outline &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <a  name="links" href="print_daftar_nilai_outline.php"><button name="links" id="links" class="btn btn-info">Print</button></a>
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive" style="overflow-x:auto;">
@@ -65,7 +66,7 @@ h<!DOCTYPE html>
 						    if ($status=="petugas") {
 						      $query = "SELECT * FROM tr1 p INNER JOIN mahasiswa m ON p.nim=m.nim where nilai_outline IS NOT NULL ORDER BY nama ";
 						    }elseif ($status=="dosen"){
-						      $query = "SELECT * FROM tr1 p INNER JOIN mahasiswa m ON p.nim=m.nim  WHERE p.dosen_pembimbing='".$dosen->nip."' AND p.nilai_huruf IS NOT NULL";
+						      $query = "SELECT * FROM tr1 p INNER JOIN mahasiswa m ON p.nim=m.nim  WHERE p.nip1='".$dosen->nip."' AND p.nilai_outline IS NOT NULL";
 						    }elseif ($status=="lab"){
 						      $query = "SELECT * FROM tr1 p INNER JOIN mahasiswa m ON p.nim=m.nim INNER JOIN lab l ON p.flag_lab=l.idlab WHERE p.flag_lab='".$lab->idlab."' AND p.nilai_huruf IS NOT NULL";
 						    }else{

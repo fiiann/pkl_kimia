@@ -6,23 +6,29 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/datatables.min.css">
 	<script src="assets/js/datatables.js" type="text/javascript"></script>
 </head>
-<script type="text/javascript">
-	$(document).ready(function(){
-    $('#tabelku').DataTable();
-});
-</script>
 <?php
 	include_once('sidebar.php');
 	$id=$_SESSION['sip_masuk_aja'];
 	// require_once('db_login.php');
 		$db=new mysqli($db_host, $db_username, $db_password, $db_database);
 ?>
+<?php if ($status!='anggota'): ?>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#tabelku').DataTable();
+});
+</script>
+<?php endif ?>
 <body>
 	<div class="row" >
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="panel panel-default">
-				<div class="panel-heading">
-					Daftar Nilai TR1
+				<div class="panel-heading">Daftar Nilai TR1 
+					<?php if ($status=='petugas'): ?>
+						
+					&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <a  name="links" href="print_daftar_nilai_tr1.php"><button name="links" id="links" class="btn btn-info">Print</button></a>
+					<?php endif ?>
 				</div>
 				<div class="panel-body">
 					<div class="table-responsive">

@@ -1,6 +1,9 @@
 <?php
 	include_once('functions.php');
 	$id=$_SESSION['sip_masuk_aja'];
+  if($status!="petugas"){
+      header('Location:./index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,8 +24,8 @@
   </head>
   <body onload="window.print();">
     <div class="panel-body" onload="window.print();">
-			Daftar Pendaftaran PKT <br>
-			Departemen Kimia Universitas Diponegoro <br>
+			<h5>Daftar Pendaftaran PKT</h5> 
+			<h5>Departemen Kimia Universitas Diponegoro</h5>
       <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
           <thead align="center">
